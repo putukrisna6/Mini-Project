@@ -10,6 +10,7 @@ public class StateManager {
 	public static final int MENUSTATE = 0;
 	public static final int SELECTSTATE = 1;
 	public static final int OPTIONSTATE = 2;
+	public static final int LEVEL1STATE = 3;
 	
 	public StateManager() {
 		states = new ArrayList<State>();
@@ -18,6 +19,7 @@ public class StateManager {
 		states.add(new MenuState(this));
 		states.add(new LevelSelectState(this));
 		states.add(new OptionState(this));
+		states.add(new Level1State(this));
 	}
 	
 	public void setState(int state) {

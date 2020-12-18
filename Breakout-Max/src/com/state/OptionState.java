@@ -35,6 +35,7 @@ public class OptionState extends State {
 				"Default", "Rare"
 			};
 	
+//	Constructor
 	public OptionState(StateManager sm) {
 		super(sm);
 
