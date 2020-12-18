@@ -29,9 +29,6 @@ public class Level1State extends State {
 		try {
 			bg = new Background("/Backgrounds/levelbg.png", 1);
 			bg.setVector(0, 0);
-//			
-//			titleFont = new Font("04b", Font.PLAIN, 24);
-//			levelFont = new Font("Minecraftia", Font.PLAIN, 14);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
