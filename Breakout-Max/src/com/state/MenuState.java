@@ -17,23 +17,17 @@ public class MenuState extends State {
 	private String[] options = {
 				"Play", "Options", "Quit"
 			};
-	
-	private Color titleColor;
-	private Font titleFont;
-	
+
 	private Font font;
 	
 	public MenuState(StateManager sm) {
 		super(sm);
 		
 		try {
-			bg = new Background("/Backgrounds/menubg.png", 1);
-			bg.setVector(-0.1, 0);
+			bg = new Background("/Backgrounds/mainbg.png", 1);
+			bg.setVector(0, 0);
 			
-			titleColor = new Color(128, 0, 0);
-			titleFont = new Font("Century Gothic", Font.BOLD, 28);
-			
-			font = new Font("Arial", Font.PLAIN, 16);
+			font = new Font("Minecraftia", Font.PLAIN, 16);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -44,7 +38,8 @@ public class MenuState extends State {
 	public void init() {}
 	@Override
 	public void update() {
-		bg.update();
+//		bg.update();
+//		uncomment to make the bg move
 	}
 	@Override
 	public void draw(Graphics2D g2d) {
@@ -54,30 +49,24 @@ public class MenuState extends State {
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON
 			);
 		
-//		draw title
-		FontMetrics metrics = g2d.getFontMetrics(titleFont);
-		String text = "Breakout Max";
-		
-		int x = makeWidth(text, metrics);
-		int y = makeHeight(70, metrics);
-
-		g2d.setColor(titleColor);
-		g2d.setFont(titleFont);
-		g2d.drawString(text, x, y);
+		FontMetrics metrics;
+		String text;
+		int x;
+		int y;
 
 //		draw menu
 		metrics = g2d.getFontMetrics(font);
 		g2d.setFont(font);
 		for (int i = 0; i < options.length; i++) {
 			if (i == currentChoice) {
-				g2d.setColor(Color.BLACK);
+				g2d.setColor(Color.RED);
 			}
 			else {
-				g2d.setColor(Color.RED);
+				g2d.setColor(Color.WHITE);
 			}
 			text = options[i];
 			x = makeWidth(text, metrics);
-			y = makeHeight(140 + i * 27, metrics);
+			y = makeHeight(170 + i * 27, metrics);
 			
 			g2d.drawString(text, x, y);
 		}
