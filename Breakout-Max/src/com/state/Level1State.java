@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 
 import com.main.Commons;
 import com.main.Main;
@@ -125,6 +126,12 @@ public class Level1State extends State {
 	@Override
 	public void keyPressed(int k) {
 		paddle.keyPressed(k);
+		
+		if (!inGame) {
+			if (k == KeyEvent.VK_ENTER) {
+				sm.setState(StateManager.SELECTSTATE);
+			}
+		}
 	}
 	@Override
 	public void keyReleased(int k) {

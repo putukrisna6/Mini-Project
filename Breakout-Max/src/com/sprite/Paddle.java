@@ -48,9 +48,6 @@ public class Paddle extends Sprite {
 		}
 	}
 	public void keyReleased(int key) {
-		System.out.println(key + "pressed");
-		System.out.println("x, y:" + x + "," + y);
-		
         if (key == KeyEvent.VK_LEFT) {
 
             dx = 0;

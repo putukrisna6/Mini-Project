@@ -1,11 +1,13 @@
 package com.state;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 
 public class StateManager {
-	private ArrayList<State> states;
+//	private ArrayList<State> states;
+	private State[] states;
 	private int currentState;
+	
+	public static final int NUMGAMESTATES = 4;
 	
 	public static final int MENUSTATE = 0;
 	public static final int SELECTSTATE = 1;
@@ -13,29 +15,57 @@ public class StateManager {
 	public static final int LEVEL1STATE = 3;
 	
 	public StateManager() {
-		states = new ArrayList<State>();
+//		states = new ArrayList<State>();
 		
-		currentState = 0;
-		states.add(new MenuState(this));
-		states.add(new LevelSelectState(this));
-		states.add(new OptionState(this));
-		states.add(new Level1State(this));
+		states = new State[NUMGAMESTATES];
+		
+		currentState = MENUSTATE;
+		loadState(currentState);
+	}
+	
+	private void loadState(int state) {
+		if (state == MENUSTATE) {
+			states[state] = new MenuState(this);
+		}
+		else if (state == SELECTSTATE) {
+			states[state] = new LevelSelectState(this);
+		}
+		else if (state == OPTIONSTATE) {
+			states[state] = new OptionState(this);
+		}
+		else if (state == LEVEL1STATE) {
+			states[state] = new Level1State(this);
+		}
+	}
+	private void unloadState(int state) {
+		states[state] = null;
 	}
 	
 	public void setState(int state) {
+		unloadState(currentState);
 		currentState = state;
-		states.get(currentState).init();
+		
+		loadState(currentState);
 	}
 	public void update() {
-		states.get(currentState).update();
+		try {
+			states[currentState].update();
+		}
+		catch (Exception e) {
+			
+		}
 	}
 	public void draw(Graphics2D g2d) {
-		states.get(currentState).draw(g2d);
+		try {
+			states[currentState].draw(g2d);
+		}
+		catch (Exception e) {
+		}
 	}
 	public void keyPressed(int k) {
-		states.get(currentState).keyPressed(k);
+		states[currentState].keyPressed(k);
 	}
 	public void keyReleased(int k) {
-		states.get(currentState).keyReleased(k);
+		states[currentState].keyReleased(k);
 	}
 }
