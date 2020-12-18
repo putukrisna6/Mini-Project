@@ -141,6 +141,11 @@ public class Level1State extends State {
 				sm.setState(StateManager.SELECTSTATE);
 			}
 		}
+		if (inGame) {
+			if (k == KeyEvent.VK_ESCAPE) {
+				sm.setState(StateManager.SELECTSTATE);
+			}
+		}
 	}
 	@Override
 	public void keyReleased(int k) {
