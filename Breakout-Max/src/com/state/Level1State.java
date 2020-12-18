@@ -113,14 +113,23 @@ public class Level1State extends State {
 		
 	}
 	private void gameFinished(Graphics2D g2d) {
-		Font font = new Font("Minecraftia", Font.PLAIN, 18);
+		Font font = new Font("04b", Font.PLAIN, 24);
 		FontMetrics fontMetrics = g2d.getFontMetrics(font);
 
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(Color.WHITE);
         g2d.setFont(font);
         g2d.drawString(message,
                 (Commons.WIDTH - fontMetrics.stringWidth(message)) / 2,
                 Commons.WIDTH / 2);
+        
+        Font bottomFont = new Font("Minecraftia", Font.PLAIN, 10);
+        fontMetrics = g2d.getFontMetrics(bottomFont);
+        
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(bottomFont);
+        g2d.drawString("Press Enter to Continue",
+                (Commons.WIDTH - fontMetrics.stringWidth("Press Enter to Continue")) / 2,
+                30 + Commons.WIDTH / 2);
 	}
 
 	@Override
