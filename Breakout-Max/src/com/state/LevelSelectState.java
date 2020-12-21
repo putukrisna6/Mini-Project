@@ -120,7 +120,7 @@ public class LevelSelectState extends State {
 			sm.setState(StateManager.LEVEL1STATE);
 		}
 		else if (currLevel == 1) {
-			
+			sm.setState(StateManager.LEVEL2STATE);
 		}
 		else if (currLevel == 2) {
 			

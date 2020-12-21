@@ -2,17 +2,21 @@ package com.state;
 
 import java.awt.Graphics2D;
 
+import com.state.levels.*;
+
 public class StateManager {
 //	private ArrayList<State> states;
 	private State[] states;
 	private int currentState;
 	
-	public static final int NUMGAMESTATES = 4;
+	public static final int NUMGAMESTATES = 5;
 	
 	public static final int MENUSTATE = 0;
 	public static final int SELECTSTATE = 1;
 	public static final int OPTIONSTATE = 2;
 	public static final int LEVEL1STATE = 3;
+	public static final int LEVEL2STATE = 4;
+
 	
 	public StateManager() {
 //		states = new ArrayList<State>();
@@ -34,7 +38,10 @@ public class StateManager {
 			states[state] = new OptionState(this);
 		}
 		else if (state == LEVEL1STATE) {
-			states[state] = new Level1State(this);
+			states[state] = new LevelOne(this);
+		}
+		else if (state == LEVEL2STATE) {
+			states[state] = new LevelTwo(this);
 		}
 	}
 	private void unloadState(int state) {

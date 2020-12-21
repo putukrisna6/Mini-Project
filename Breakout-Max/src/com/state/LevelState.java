@@ -13,7 +13,7 @@ import com.main.Main;
 import com.map.Background;
 import com.sprite.*;
 
-public class Level1State extends State {
+public class LevelState extends State {
 	private boolean inGame = true;
 	private int score = 0;
 	private String message = "Game Over";
@@ -22,9 +22,9 @@ public class Level1State extends State {
 //	Game Sprite
 	private Ball ball;
 	private Paddle paddle;
-	private Brick[] bricks;
+	protected Brick[] bricks;
 	
-	public Level1State(StateManager sm) {
+	public LevelState(StateManager sm) {
 		super(sm);
 		try {
 			bg = new Background("/Backgrounds/levelbg.png", 1);
@@ -38,17 +38,6 @@ public class Level1State extends State {
 		
 		ball = new Ball();
 		paddle = new Paddle();
-		
-		int k = 0;
-		for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                bricks[k] = new Brick(
-                				j * 40 + 30, 
-                				i * 10 + 50
-                			);
-                k++;
-            }
-        }
 	}
 
 	@Override
@@ -158,94 +147,83 @@ public class Level1State extends State {
 		inGame = false;
 	}
 	private void checkCollision() {
-		  if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) {
+		if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) {
+			stopGame();
+	    }
+
+	    for (int i = 0, j = 0; i < Commons.N_OF_BRICKS; i++) {
+	    	if (bricks[i].getIsDestroyed()) {
+	    		j++;
+	        }
+
+	    	if (j == Commons.N_OF_BRICKS) {
+	    		message = "Victory";
 	            stopGame();
 	        }
+	    }
 
-	        for (int i = 0, j = 0; i < Commons.N_OF_BRICKS; i++) {
+	    if ((ball.getRect()).intersects(paddle.getRect())) {
 
-	            if (bricks[i].getIsDestroyed()) {
+	    	int paddleLPos = (int) paddle.getRect().getMinX();
+	    	int ballLPos = (int) ball.getRect().getMinX();
+	    	
+	    	int first = paddleLPos + 8;
+	    	int second = paddleLPos + 16;
+	    	int third = paddleLPos + 24;
+	    	int fourth = paddleLPos + 32;
 
-	                j++;
-	            }
-
-	            if (j == Commons.N_OF_BRICKS) {
-	                message = "Victory";
-	                stopGame();
-	            }
+	    	if (ballLPos < first) {
+	    		ball.setXDir(-1);
+	    		ball.setYDir(-1);
+	    	}
+	    	if (ballLPos >= first && ballLPos < second) {
+	    		ball.setXDir(-1);
+	    		ball.setYDir(-1 * ball.getYDir());
 	        }
-
-	        if ((ball.getRect()).intersects(paddle.getRect())) {
-
-	            int paddleLPos = (int) paddle.getRect().getMinX();
-	            int ballLPos = (int) ball.getRect().getMinX();
-
-	            int first = paddleLPos + 8;
-	            int second = paddleLPos + 16;
-	            int third = paddleLPos + 24;
-	            int fourth = paddleLPos + 32;
-
-	            if (ballLPos < first) {
-
-	                ball.setXDir(-1);
-	                ball.setYDir(-1);
+	    	if (ballLPos >= second && ballLPos < third) {
+	    		ball.setXDir(0);
+	            ball.setYDir(-1);
+	    	}
+	    	if (ballLPos >= third && ballLPos < fourth) {
+	    		ball.setXDir(1);
+	    		ball.setYDir(-1 * ball.getYDir());
 	            }
+	    	if (ballLPos > fourth) {
+	    		ball.setXDir(1);
+	    		ball.setYDir(-1);
+	    	}
+	    }
+	    
+	    for (int i = 0; i < Commons.N_OF_BRICKS; i++) {
+	    	if ((ball.getRect()).intersects(bricks[i].getRect())) {
 
-	            if (ballLPos >= first && ballLPos < second) {
+	    		int ballLeft = (int) ball.getRect().getMinX();
+	    		int ballHeight = (int) ball.getRect().getHeight();
+	    		int ballWidth = (int) ball.getRect().getWidth();
+	    		int ballTop = (int) ball.getRect().getMinY();
 
-	                ball.setXDir(-1);
-	                ball.setYDir(-1 * ball.getYDir());
-	            }
+	    		Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+	    		Point pointLeft = new Point(ballLeft - 1, ballTop);
+	    		Point pointTop = new Point(ballLeft, ballTop - 1);
+	    		Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
 
-	            if (ballLPos >= second && ballLPos < third) {
-
-	                ball.setXDir(0);
-	                ball.setYDir(-1);
-	            }
-
-	            if (ballLPos >= third && ballLPos < fourth) {
-
-	                ball.setXDir(1);
-	                ball.setYDir(-1 * ball.getYDir());
-	            }
-
-	            if (ballLPos > fourth) {
-
-	                ball.setXDir(1);
-	                ball.setYDir(-1);
-	            }
-	        }
-
-	        for (int i = 0; i < Commons.N_OF_BRICKS; i++) {
-	            if ((ball.getRect()).intersects(bricks[i].getRect())) {
-
-	                int ballLeft = (int) ball.getRect().getMinX();
-	                int ballHeight = (int) ball.getRect().getHeight();
-	                int ballWidth = (int) ball.getRect().getWidth();
-	                int ballTop = (int) ball.getRect().getMinY();
-
-	                Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-	                Point pointLeft = new Point(ballLeft - 1, ballTop);
-	                Point pointTop = new Point(ballLeft, ballTop - 1);
-	                Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-
-	                if (!bricks[i].getIsDestroyed()) {
-	                    if (bricks[i].getRect().contains(pointRight)) {
-	                        ball.setXDir(-1);
-	                    } 
-	                    else if (bricks[i].getRect().contains(pointLeft)) {
-	                    	ball.setXDir(1);
-	                    }
-	                    if (bricks[i].getRect().contains(pointTop)) {
-	                        ball.setYDir(1);
-	                    } 
-	                    else if (bricks[i].getRect().contains(pointBottom)) {
-	                    	ball.setYDir(-1);
-	                    }
-	                    bricks[i].setIsDestroyed(true);
-	                    score++;
-	                }
-	            }
-	        }
+	    		if (!bricks[i].getIsDestroyed()) {
+	    			if (bricks[i].getRect().contains(pointRight)) {
+	    				ball.setXDir(-1);
+	    			}
+	    			else if (bricks[i].getRect().contains(pointLeft)) {
+	    				ball.setXDir(1);
+	    			}
+	    			if (bricks[i].getRect().contains(pointTop)) {
+	    				ball.setYDir(1);
+	    			}
+	    			else if (bricks[i].getRect().contains(pointBottom)) {
+	    				ball.setYDir(-1);
+	    			}
+	    			bricks[i].setIsDestroyed(true);
+	    			score++;
+	    		}
+	    	}
+	    }
 	}
 }
