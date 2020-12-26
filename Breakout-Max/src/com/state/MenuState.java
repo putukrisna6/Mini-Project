@@ -8,34 +8,40 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
 import com.main.Commons;
+import com.map.AudioPlayer;
 import com.map.Background;
 
 public class MenuState extends State {
 
 	private Background bg;
+	
+//	Options
 	private int currentChoice = 0;
 	private String[] options = {
 				"Play", "Controls", "Options", "Quit"
 			};
-
 	private Font font;
 	
+//	Constructor
 	public MenuState(StateManager sm) {
 		super(sm);
-		
+		init();
+	}
+	
+	@Override
+	public void init() {
 		try {
 			bg = new Background("/Backgrounds/mainbg.png", 1);
 			bg.setVector(0, 0);
 			
 			font = new Font("Minecraftia", Font.PLAIN, 16);
+			bgMusic = new AudioPlayer("/Music/menubgtemp.wav");
+			bgMusic.play();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void init() {}
 	@Override
 	public void update() {
 //		bg.update();

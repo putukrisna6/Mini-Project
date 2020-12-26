@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 import com.main.Commons;
 import com.main.Main;
@@ -14,6 +15,7 @@ import com.map.Background;
 import com.sprite.*;
 
 public class LevelState extends State {
+	
 	private boolean inGame = true;
 	private int score = 0;
 	private String message = "Game Over";
@@ -224,6 +226,15 @@ public class LevelState extends State {
 	    			}
 	    			bricks[i].setIsDestroyed(true);
 	    			score++;
+	    			
+	    			// trying out the Random class
+	    			// to be improved upon to implement the random boon/curse mechanism
+	    			Random rand = new Random();
+	    			int randInt = rand.nextInt(1000);
+	    			
+	    			if (randInt % 10 == 0) {
+	    				System.out.println("it's random! " + randInt);
+	    			}
 	    		}
 	    	}
 	    }

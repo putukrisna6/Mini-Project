@@ -53,6 +53,7 @@ public class StateManager {
 		}
 	}
 	private void unloadState(int state) {
+		states[state].close();
 		states[state] = null;
 	}
 	
