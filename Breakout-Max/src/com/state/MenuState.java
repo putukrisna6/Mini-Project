@@ -15,7 +15,7 @@ public class MenuState extends State {
 	private Background bg;
 	private int currentChoice = 0;
 	private String[] options = {
-				"Play", "Options", "Quit"
+				"Play", "Controls", "Options", "Quit"
 			};
 
 	private Font font;
@@ -97,9 +97,12 @@ public class MenuState extends State {
 			sm.setState(StateManager.SELECTSTATE);
 		}
 		else if (currentChoice == 1) {
-			sm.setState(StateManager.OPTIONSTATE);
+			sm.setState(StateManager.HELPSTATE);
 		}
 		else if (currentChoice == 2) {
+			sm.setState(StateManager.OPTIONSTATE);
+		}
+		else if (currentChoice == 3) {
 			System.exit(0);
 		}
 	}

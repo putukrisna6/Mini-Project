@@ -23,8 +23,9 @@ public class LevelState extends State {
 	private Ball ball;
 	private Paddle paddle;
 	protected Brick[] bricks;
+	protected int numOfBricks;
 	
-	public LevelState(StateManager sm) {
+	public LevelState(StateManager sm, int numOfBricks) {
 		super(sm);
 		try {
 			bg = new Background("/Backgrounds/levelbg.png", 1);
@@ -33,8 +34,9 @@ public class LevelState extends State {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.numOfBricks = numOfBricks;
 		
-		bricks = new Brick[Commons.N_OF_BRICKS];
+		bricks = new Brick[this.numOfBricks];
 		
 		ball = new Ball();
 		paddle = new Paddle();
@@ -85,7 +87,7 @@ public class LevelState extends State {
                 Main.panel
 			);
 		
-		for (int i = 0; i < Commons.N_OF_BRICKS; i++) {
+		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
 				g2d.drawImage(bricks[i].getImage(), bricks[i].getX(),
 	                        bricks[i].getY(), bricks[i].getImageWidth(),
@@ -151,12 +153,12 @@ public class LevelState extends State {
 			stopGame();
 	    }
 
-	    for (int i = 0, j = 0; i < Commons.N_OF_BRICKS; i++) {
+	    for (int i = 0, j = 0; i < numOfBricks; i++) {
 	    	if (bricks[i].getIsDestroyed()) {
 	    		j++;
 	        }
 
-	    	if (j == Commons.N_OF_BRICKS) {
+	    	if (j == numOfBricks) {
 	    		message = "Victory";
 	            stopGame();
 	        }
@@ -194,7 +196,7 @@ public class LevelState extends State {
 	    	}
 	    }
 	    
-	    for (int i = 0; i < Commons.N_OF_BRICKS; i++) {
+	    for (int i = 0; i < numOfBricks; i++) {
 	    	if ((ball.getRect()).intersects(bricks[i].getRect())) {
 
 	    		int ballLeft = (int) ball.getRect().getMinX();

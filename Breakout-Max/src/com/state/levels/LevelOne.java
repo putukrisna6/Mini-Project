@@ -5,9 +5,9 @@ import com.state.LevelState;
 import com.state.StateManager;
 
 public class LevelOne extends LevelState {
-	
-	public LevelOne(StateManager sm) {
-		super(sm);
+
+	public LevelOne(StateManager sm, int numOfBricks) {
+		super(sm, numOfBricks);
 		
 		int k = 0;
 		for (int i = 0; i < 5; i++) {

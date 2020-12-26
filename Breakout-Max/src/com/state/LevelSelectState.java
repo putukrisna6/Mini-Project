@@ -19,9 +19,13 @@ public class LevelSelectState extends State {
 
 //	Options Font
 	private Font levelFont;
-	private String[] levels = {
-			"Stage 1", "Stage 2", "Stage 3", "Back to Menu"
-		};
+	private String[][] levelSets = {
+									{"<|  Adventure I  |>", "Stage I-1", "Stage I-2", "Stage I-3","Back to Menu"},
+									{"<|  Adventure II  |>","Stage II-1", "Stage II-2", "Stage II-3", "Back to Menu"},
+									{"<|  Adventure III  |>","Stage III-1","Stage III-2", "Stage III-3", "Back to Menu"}
+									};
+	
+	private int currSet = 0;
 	private int currLevel = 0;
 
 //	Constructor
@@ -72,7 +76,7 @@ public class LevelSelectState extends State {
 		m = g2d.getFontMetrics(levelFont);
 		g2d.setFont(levelFont);
 		
-		for (int i = 0; i < levels.length; i++) {
+		for (int i = 0; i < levelSets[currSet].length; i++) {
 			if (i == currLevel) {
 				g2d.setColor(Color.RED);
 			}
@@ -81,12 +85,12 @@ public class LevelSelectState extends State {
 			}
 			
 			y = makeHeight(140 + i * 27, m);
-
-			if (i == 3) {
-				y = makeHeight(140 + i * 40, m);
+			// make the "back to menu" lower
+			if (i == 4) {
+				y = makeHeight(140 + i * 35, m);
 			}
 			
-			text = levels[i];
+			text = levelSets[currSet][i];
 			x = makeWidth(text, m);
 			
 			g2d.drawString(text, x, y);
@@ -95,18 +99,33 @@ public class LevelSelectState extends State {
 
 	@Override
 	public void keyPressed(int k) {
+		if (currLevel == 0) {
+			if (k == KeyEvent.VK_LEFT) {
+				currSet--;
+				if (currSet < 0) {
+					currSet = levelSets.length - 1;
+				}
+			}
+			else if (k == KeyEvent.VK_RIGHT) {
+				currSet++;
+				if (currSet == levelSets.length) {
+					currSet = 0;
+				}
+			}
+		}	
+		
 		if (k == KeyEvent.VK_ENTER) {
 			select();
 		}
 		if (k == KeyEvent.VK_UP) {
 			currLevel--;
 			if (currLevel < 0) {
-				currLevel = levels.length - 1;
+				currLevel = levelSets[currSet].length - 1;
 			}
 		}
 		if (k == KeyEvent.VK_DOWN) {
 			currLevel++;
-			if (currLevel == levels.length) {
+			if (currLevel == levelSets[currSet].length) {
 				currLevel = 0;
 			}
 		}
@@ -116,17 +135,32 @@ public class LevelSelectState extends State {
 	public void keyReleased(int k) {}
 	
 	private void select() {
-		if (currLevel == 0) {
-			sm.setState(StateManager.LEVEL1STATE);
-		}
-		else if (currLevel == 1) {
-			sm.setState(StateManager.LEVEL2STATE);
-		}
-		else if (currLevel == 2) {
-			
-		}
-		else if (currLevel == 3) {
+//		if (currLevel == 0) {
+//			sm.setState(StateManager.LEVEL1STATE);
+//		}
+//		else if (currLevel == 1) {
+//			sm.setState(StateManager.LEVEL2STATE);
+//		}
+//		else if (currLevel == 2) {
+//			
+//		}
+//		else if (currLevel == 3) {
+//			sm.setState(StateManager.MENUSTATE);
+//		}
+		if (currLevel == 4) {
 			sm.setState(StateManager.MENUSTATE);
+		}
+		
+		if (currSet == 0) {
+			if (currLevel == 1) {
+				sm.setState(StateManager.LEVEL1STATE);
+			}
+			else if (currLevel == 2) {
+				sm.setState(StateManager.LEVEL2STATE);
+			}
+			else if (currLevel == 3) {
+				sm.setState(StateManager.LEVEL3STATE);
+			}
 		}
 	}
 	

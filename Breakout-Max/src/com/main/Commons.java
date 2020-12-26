@@ -3,7 +3,7 @@ package com.main;
 public interface Commons {
 	public static final int WIDTH = 300;
 	public static final int HEIGHT = 400;
-	public static final int SCALE = 2;
+	public static final int SCALE = 1;
 	
 	public static final int BOTTOM_EDGE = 390;
 	public static final int N_OF_BRICKS = 30;

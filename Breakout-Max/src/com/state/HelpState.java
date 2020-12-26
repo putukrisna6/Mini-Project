@@ -10,34 +10,24 @@ import java.awt.event.KeyEvent;
 import com.main.Commons;
 import com.map.Background;
 
-public class OptionState extends State {
+public class HelpState extends State {
 	private Background bg;
-	
+
 //	Title Font
 	private Font titleFont;
-
 //	Options Font
 	private Font optionFont;
 	private String[] options = {
-			"Difficulty: ", "Paddle Skin: ", "Back to Menu"
+			"Select: Enter Key", 
+			"Paddle Left: Left Arrow Key", 
+			"Paddle Right: Right Arrow Key",
+			"Exit Stage: Escape Key",
+			"Back to Menu"
 		};
-	private int currChoice = 0;
 	
-//	Select
-	private static int currDiff = 0;
-	private String[] diff = {
-				"<|  Easy  |>", "<|  Normal  |>", "<|  Hard  |>"
-			};
-	
-	private static int currSkin = 0;
-	private String[] skin = {
-				"<|  Default  |>", "<|  Rare  |>"
-			};
-	
-//	Constructor
-	public OptionState(StateManager sm) {
+	public HelpState(StateManager sm) {
 		super(sm);
-
+		
 		try {
 			bg = new Background("/Backgrounds/optionsbg.png", 1);
 			bg.setVector(0, 0);
@@ -52,9 +42,13 @@ public class OptionState extends State {
 	}
 
 	@Override
-	public void init() {}
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public void update() {
+		// TODO Auto-generated method stub
 		
 	}
 	@Override
@@ -75,7 +69,7 @@ public class OptionState extends State {
 		m = g2d.getFontMetrics(titleFont);
 		g2d.setFont(titleFont);
 		g2d.setColor(Color.WHITE);
-		text = "Options";
+		text = "Controls";
 		x = makeWidth(text, m);
 		y = makeHeight(70, m);
 		
@@ -86,24 +80,15 @@ public class OptionState extends State {
 		g2d.setFont(optionFont);
 		
 		for (int i = 0; i < options.length; i++) {
-			if (i == currChoice) {
+			text = options[i];
+
+			if (i == 4) {
+				y = makeHeight(140 + i * 40, m);
 				g2d.setColor(Color.GREEN);
 			}
 			else {
+				y = makeHeight(140 + i * 27, m); 
 				g2d.setColor(Color.WHITE);
-			}
-			
-			y = makeHeight(140 + i * 27, m);
-			
-			if (i == 0) {
-				text = options[i] + diff[currDiff];
-			}
-			else if (i == 1) {
-				text = options[i] + skin[currSkin];
-			}
-			else if (i == 2) {
-				text = options[i];
-				y = makeHeight(140 + i * 40, m);
 			}
 			
 			x = makeWidth(text, m);
@@ -115,64 +100,11 @@ public class OptionState extends State {
 	@Override
 	public void keyPressed(int k) {
 		if (k == KeyEvent.VK_ENTER) {
-			select();
-		}
-		if (k == KeyEvent.VK_UP) {
-			currChoice--;
-			if (currChoice < 0) {
-				currChoice = options.length - 1;
-			}
-		}
-		if (k == KeyEvent.VK_DOWN) {
-			currChoice++;
-			if (currChoice == options.length) {
-				currChoice = 0;
-			}
-		}
-		
-		if (currChoice == 0) {
-			if (k == KeyEvent.VK_LEFT) {
-				currDiff--;
-				if (currDiff < 0) {
-					currDiff = diff.length - 1;
-				}
-			}
-			else if (k == KeyEvent.VK_RIGHT) {
-				currDiff++;
-				if (currDiff == diff.length) {
-					currDiff = 0;
-				}
-			}
-		}
-		else if (currChoice == 1) {
-			if (k == KeyEvent.VK_LEFT) {
-				currSkin--;
-				if (currSkin < 0) {
-					currSkin = skin.length - 1;
-				}
-			}
-			else if (k == KeyEvent.VK_RIGHT) {
-				currSkin++;
-				if (currSkin == skin.length) {
-					currSkin = 0;
-				}
-			}
+			sm.setState(StateManager.MENUSTATE);
 		}
 	}
 	@Override
 	public void keyReleased(int k) {}
-	
-	private void select() {
-		if (currChoice == 0) {
-			
-		}
-		else if (currChoice == 1) {
-			
-		}
-		else if (currChoice == 2) {
-			sm.setState(StateManager.MENUSTATE);
-		}
-	}
 	
 	private int makeWidth(String text, FontMetrics m) {
 		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
