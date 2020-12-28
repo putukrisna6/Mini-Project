@@ -9,8 +9,7 @@ import com.main.Commons;
 public class Paddle extends Sprite {
 	private int dx;
 	private int moveSpeedLeft = -1;
-	private int moveSpeedRight = 1;
-	
+	private int moveSpeedRight = 1;	
 	
 	@Override
 	protected void loadImage() {
@@ -58,10 +57,15 @@ public class Paddle extends Sprite {
         }
     }
 	
-	public void setMoveSpeedLeft(int moveSpeedLeft) {
-		this.moveSpeedLeft = moveSpeedLeft;
+	public void setMoveSpeed(int multiplier) {
+		this.moveSpeedLeft *= multiplier;
+		this.moveSpeedRight *= multiplier;
 	}
-	public void setMoveSpeedRight(int moveSpeedRight) {
-		this.moveSpeedRight = moveSpeedRight;
-	}
+	
+//	public void setMoveSpeedLeft(int moveSpeedLeft) {
+//		this.moveSpeedLeft = moveSpeedLeft;
+//	}
+//	public void setMoveSpeedRight(int moveSpeedRight) {
+//		this.moveSpeedRight = moveSpeedRight;
+//	}
 }

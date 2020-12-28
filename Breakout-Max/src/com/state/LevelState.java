@@ -46,6 +46,7 @@ public class LevelState extends State {
 		
 		ball = new Ball();
 		paddle = new Paddle();
+		paddle.setMoveSpeed(5);
 		drops = new ArrayList<Drop>();
 	}
 
@@ -260,7 +261,6 @@ public class LevelState extends State {
 	    			
 	    			if (true) {
 //	    				System.out.println("it's random! " + randInt);
-	    				System.out.println("drop time!");
 	    				drops.add(new Drop(bricks[i].getX() + 10, bricks[i].getY()));
 	    			}
 	    		}
@@ -270,6 +270,10 @@ public class LevelState extends State {
 	private void updateDrops() {
 		for (int i = 0; i < drops.size(); i++) {
 			Drop drop = drops.get(i);
+			
+			if (drop.getRect().intersects(paddle.getRect())) {
+				drop.setVisible(false);
+			}
 			
 			if (drop.isVisible()) {
 				drop.move();
