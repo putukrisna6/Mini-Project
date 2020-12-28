@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.main.Commons;
@@ -27,6 +29,8 @@ public class LevelState extends State {
 	protected Brick[] bricks;
 	protected int numOfBricks;
 	
+	List<Drop> drops;
+	
 	public LevelState(StateManager sm, int numOfBricks) {
 		super(sm);
 		try {
@@ -42,6 +46,7 @@ public class LevelState extends State {
 		
 		ball = new Ball();
 		paddle = new Paddle();
+		drops = new ArrayList<Drop>();
 	}
 
 	@Override
@@ -91,15 +96,35 @@ public class LevelState extends State {
 		
 		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
-				g2d.drawImage(bricks[i].getImage(), bricks[i].getX(),
-	                        bricks[i].getY(), bricks[i].getImageWidth(),
-	                        bricks[i].getImageHeight(), null);
+				g2d.drawImage(
+							bricks[i].getImage(), 
+							bricks[i].getX(),
+							bricks[i].getY(), 
+							bricks[i].getImageWidth(),
+							bricks[i].getImageHeight(), 
+							null
+	                    );
 			}
 		}
 		
+		try {
+			for (Drop drop : drops) {
+				g2d.drawImage(
+						drop.getImage(), 
+						drop.getX(), 
+						drop.getY(), 
+						drop.getImageHeight(), 
+						drop.getImageWidth(), 
+						Main.panel);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		 g2d.setColor(Color.GRAY);
-	        g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-			g2d.drawString(String.valueOf(score), 10, 30);
+	     g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+	     g2d.drawString(String.valueOf(score), 10, 30);
 		
 	}
 	private void gameFinished(Graphics2D g2d) {
@@ -146,6 +171,7 @@ public class LevelState extends State {
 		ball.move();
 		paddle.move();
 		checkCollision();
+		updateDrops();
 	}
 	private void stopGame() {
 		inGame = false;
@@ -229,14 +255,28 @@ public class LevelState extends State {
 	    			
 	    			// trying out the Random class
 	    			// to be improved upon to implement the random boon/curse mechanism
-	    			Random rand = new Random();
-	    			int randInt = rand.nextInt(1000);
+//	    			Random rand = new Random();
+//	    			int randInt = rand.nextInt(1000);
 	    			
-	    			if (randInt % 10 == 0) {
-	    				System.out.println("it's random! " + randInt);
+	    			if (true) {
+//	    				System.out.println("it's random! " + randInt);
+	    				System.out.println("drop time!");
+	    				drops.add(new Drop(bricks[i].getX() + 10, bricks[i].getY()));
 	    			}
 	    		}
 	    	}
 	    }
+	}
+	private void updateDrops() {
+		for (int i = 0; i < drops.size(); i++) {
+			Drop drop = drops.get(i);
+			
+			if (drop.isVisible()) {
+				drop.move();
+			}
+			else {
+				drops.remove(i);
+			}
+		}
 	}
 }

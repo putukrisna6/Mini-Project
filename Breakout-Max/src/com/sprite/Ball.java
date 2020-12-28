@@ -11,6 +11,7 @@ public class Ball extends Sprite {
 	private int yDir;
 	private int speedMultiplier = 1;
 	
+	@Override
 	protected void loadImage() {
 		ImageIcon ii = new ImageIcon("Resource/Sprites/ball.png");
 		image = ii.getImage();
