@@ -5,8 +5,6 @@ import javax.swing.ImageIcon;
 import com.main.Commons;
 
 public class Drop extends Sprite {
-
-//	Probably will have a lot in common with the Ball class
 	
 	private int yDir;
 	
@@ -46,5 +44,10 @@ public class Drop extends Sprite {
 	}
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+	
+	@Override
+	public String toString() {
+		return "Drop";
 	}
 }

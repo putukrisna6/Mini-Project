@@ -6,10 +6,15 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.Timer;
 
 import com.main.Commons;
 import com.main.Main;
@@ -18,6 +23,7 @@ import com.sprite.*;
 
 public class LevelState extends State {
 	
+//	Attributes for basic level stuffs
 	private boolean inGame = true;
 	private int score = 0;
 	private String message = "Game Over";
@@ -31,6 +37,11 @@ public class LevelState extends State {
 	
 	List<Drop> drops;
 	
+//	List of buffs
+	HashSet<String> effects;
+	String dropEffect;
+	
+//	Constructor
 	public LevelState(StateManager sm, int numOfBricks) {
 		super(sm);
 		try {
@@ -46,8 +57,12 @@ public class LevelState extends State {
 		
 		ball = new Ball();
 		paddle = new Paddle();
+//		just a quick modifier so that the paddle isn't so slow
+//		but later on should be tied to the buffs implementation
 		paddle.setMoveSpeed(5);
 		drops = new ArrayList<Drop>();
+		
+		dropEffect = null;
 	}
 
 	@Override
@@ -77,7 +92,9 @@ public class LevelState extends State {
         }
 	}
 	
+	// draw every sprite	
 	private void drawObjects(Graphics2D g2d) {
+		// draw ball		
 		g2d.drawImage(
 				ball.getImage(), 
 				ball.getX(), 
@@ -86,6 +103,7 @@ public class LevelState extends State {
 				ball.getImageHeight(), 
 				Main.panel
 			);
+		// draw paddle		
 		g2d.drawImage(
 				paddle.getImage(), 
 				paddle.getX(), 
@@ -95,6 +113,7 @@ public class LevelState extends State {
                 Main.panel
 			);
 		
+		// draw bricks		
 		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
 				g2d.drawImage(
@@ -108,6 +127,7 @@ public class LevelState extends State {
 			}
 		}
 		
+		// draw drops		
 		try {
 			for (Drop drop : drops) {
 				g2d.drawImage(
@@ -123,31 +143,54 @@ public class LevelState extends State {
 			e.printStackTrace();
 		}
 		
-		 g2d.setColor(Color.GRAY);
-	     g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-	     g2d.drawString(String.valueOf(score), 10, 30);
+		// draw score string		
+		g2d.setColor(Color.GRAY);
+	    g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+	    g2d.drawString(String.valueOf(score), 10, 30);
 		
+	    // draw collect drop notification
+	    g2d.setColor(Color.BLACK);
+	    Font notifFont = new Font("Minecraftia", Font.PLAIN, 15);
+	    g2d.setFont(notifFont);
+		FontMetrics fontMetrics = g2d.getFontMetrics(notifFont);
+	    try {
+	    	// don't draw anything if there's nothing to draw	    	
+	    	if (dropEffect != null) {
+	    		g2d.drawString(
+	    						dropEffect, 
+	    						(Commons.WIDTH - fontMetrics.stringWidth(dropEffect)) / 2,
+	    						Commons.WIDTH / 2);
+	    	}
+	    }
+	    catch (Exception e) {
+	    	e.printStackTrace();
+	    }
 	}
+	// if the game is done, draw these strings	
 	private void gameFinished(Graphics2D g2d) {
+		// Attributes to help to draw the message string
 		Font font = new Font("04b", Font.PLAIN, 24);
 		FontMetrics fontMetrics = g2d.getFontMetrics(font);
-
-        g2d.setColor(Color.WHITE);
+        // draw the string
+		g2d.setColor(Color.WHITE);
         g2d.setFont(font);
         g2d.drawString(message,
                 (Commons.WIDTH - fontMetrics.stringWidth(message)) / 2,
                 Commons.WIDTH / 2);
         
+        // draw the little message below the main message
         Font bottomFont = new Font("Minecraftia", Font.PLAIN, 10);
         fontMetrics = g2d.getFontMetrics(bottomFont);
-        
         g2d.setColor(Color.BLACK);
         g2d.setFont(bottomFont);
-        g2d.drawString("Press Enter to Continue",
-                (Commons.WIDTH - fontMetrics.stringWidth("Press Enter to Continue")) / 2,
+        fontMetrics = g2d.getFontMetrics(bottomFont);
+        String cont = "Press Enter to Continue";
+        g2d.drawString(cont,
+                (Commons.WIDTH - fontMetrics.stringWidth(cont)) / 2,
                 30 + Commons.WIDTH / 2);
 	}
 
+	// handle keyboard inputs
 	@Override
 	public void keyPressed(int k) {
 		paddle.keyPressed(k);
@@ -177,6 +220,7 @@ public class LevelState extends State {
 	private void stopGame() {
 		inGame = false;
 	}
+	// check collision between paddle, ball, bricks, and the wall	
 	private void checkCollision() {
 		if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) {
 			stopGame();
@@ -258,7 +302,7 @@ public class LevelState extends State {
 	    			// to be improved upon to implement the random boon/curse mechanism
 //	    			Random rand = new Random();
 //	    			int randInt = rand.nextInt(1000);
-	    			
+//	    			TODO - make it actually random
 	    			if (true) {
 //	    				System.out.println("it's random! " + randInt);
 	    				drops.add(new Drop(bricks[i].getX() + 10, bricks[i].getY()));
@@ -267,14 +311,31 @@ public class LevelState extends State {
 	    	}
 	    }
 	}
+	// handles everything from making the drop move, disappear, then when the drop is "collected"	
 	private void updateDrops() {
 		for (int i = 0; i < drops.size(); i++) {
 			Drop drop = drops.get(i);
 			
+			// if the paddle intersects with the drop, "collect" it			
 			if (drop.getRect().intersects(paddle.getRect())) {
+				// change the dropEffect string to inform what was activated
+				dropEffect = drop.toString() + " is now active!";
+				// wait for 800 millisecond (I think it is 800 millisecond)
+				// afterwards set the string back to null so it is no longer visible
+				// then stop the timer
+				new Timer(800, new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		            	dropEffect = null;
+		            	((Timer)e.getSource()).stop();
+		            }
+		        }).start();
+				// don't forget to make the drop disappear
 				drop.setVisible(false);
 			}
 			
+			// if the drop is still visible, make it move
+			// otherwise, remove the object
 			if (drop.isVisible()) {
 				drop.move();
 			}
