@@ -1,16 +1,11 @@
 package com.sprite;
 
-import javax.swing.ImageIcon;
-
-public class Brick extends Sprite {
+public abstract class Brick extends Sprite {
 	
 	private boolean isDestroyed;
 	
 	@Override
-	protected void loadImage() {
-		ImageIcon ii = new ImageIcon("Resource/Sprites/brick.png");
-		image = ii.getImage();
-	}
+	protected abstract void loadImage();
 	
 	public Brick(int x, int y) {
 		super();

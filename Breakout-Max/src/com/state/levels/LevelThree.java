@@ -1,6 +1,6 @@
 package com.state.levels;
 
-import com.sprite.Brick;
+import com.sprite.bricks.NormalBrick;
 import com.state.LevelState;
 import com.state.StateManager;
 
@@ -16,7 +16,7 @@ public class LevelThree extends LevelState {
 //		TODO - implement this better please :c
 		for (int i = 0; i < rows / 2; i++) {
             for (int j = 0; j < cols; j++) {
-                bricks[k] = new Brick(
+                bricks[k] = new NormalBrick(
                 				j * 40 + 50, 
                 				i * 10 + 50
                 			);
@@ -38,7 +38,7 @@ public class LevelThree extends LevelState {
         }
 		for (int i = 5; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                bricks[k] = new Brick(
+                bricks[k] = new NormalBrick(
                 				j * 40 + 50, 
                 				i * 10 + 50
                 			);

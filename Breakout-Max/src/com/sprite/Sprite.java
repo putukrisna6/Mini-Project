@@ -10,7 +10,7 @@ public abstract class Sprite {
 	private int imageWidth;
 	private int imageHeight;
 	
-	Image image;
+	protected Image image;
 	
 //	Setters and Getters
 	public int getX() {

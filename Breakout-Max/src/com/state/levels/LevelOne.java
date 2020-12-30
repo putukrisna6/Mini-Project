@@ -1,6 +1,6 @@
 package com.state.levels;
 
-import com.sprite.Brick;
+import com.sprite.bricks.NormalBrick;
 import com.state.LevelState;
 import com.state.StateManager;
 
@@ -12,7 +12,7 @@ public class LevelOne extends LevelState {
 		int k = 0;
 		for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 6; j++) {
-                bricks[k] = new Brick(
+                bricks[k] = new NormalBrick(
                 				j * 40 + 30, 
                 				i * 10 + 50
                 			);
