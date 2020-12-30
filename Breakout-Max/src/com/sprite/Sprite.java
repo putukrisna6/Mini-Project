@@ -49,7 +49,7 @@ public abstract class Sprite {
 					image.getHeight(null)
 				);
 	}
-	private void getImageDimensions() {
+	protected void getImageDimensions() {
 		imageWidth = image.getWidth(null);
 		imageHeight = image.getHeight(null);
 	}

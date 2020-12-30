@@ -20,10 +20,7 @@ import com.main.Commons;
 import com.main.Main;
 import com.map.Background;
 import com.sprite.*;
-import com.sprite.drops.Buff;
-import com.sprite.drops.BuffList;
-import com.sprite.drops.Debuff;
-import com.sprite.drops.DebuffList;
+import com.sprite.drops.*;
 
 public class LevelState extends State {
 	
@@ -61,9 +58,6 @@ public class LevelState extends State {
 		
 		ball = new Ball();
 		paddle = new Paddle();
-//		just a quick modifier so that the paddle isn't so slow
-//		but later on should be tied to the buffs implementation
-		paddle.setMoveSpeed(5);
 		drops = new ArrayList<Drop>();
 		
 		dropEffect = null;
@@ -326,7 +320,6 @@ public class LevelState extends State {
 			
 			// if the paddle intersects with the drop, "collect" it			
 			if (drop.getRect().intersects(paddle.getRect())) {
-				
 				if (drop instanceof Buff) {
 					isGood = true;
 				}
@@ -361,14 +354,15 @@ public class LevelState extends State {
 			}
 		}
 	}
-	
 	private void fetchEffect(boolean isGood, int effect) {
 		if (isGood) {
 			switch (effect) {
 			case BuffList.DOUBLE_PAD_LENGTH: 
-				dropEffect = "Double Paddle Length is now active!";
+				dropEffect = "Longer Paddle!";
+				paddle.setToLong();
 				return;
 			case BuffList.DOUBLE_SCORE:
+				// TODO - Hadeh mager banget implementasi timer awokwaokaw
 				dropEffect = "Double Score for 5 seconds!";
 				return;
 			case BuffList.DOUBLE_BALLS:
@@ -376,6 +370,7 @@ public class LevelState extends State {
 				return;
 			case BuffList.DOUBLE_PAD_SPEED:
 				dropEffect = "Move Faster!";
+				paddle.setMoveSpeed(2);
 				return;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + effect);
@@ -384,16 +379,18 @@ public class LevelState extends State {
 		else {
 			switch (effect) {
 			case DebuffList.HALF_PAD_LENGTH:
-				dropEffect = "Oh no! Your paddle's length is halved!";
+				dropEffect = "Chopped Paddle...";
+				paddle.setToShort();
 				return;
 			case DebuffList.HALF_BALL_SPEED:
-				dropEffect = "Snail Speed!";
+				dropEffect = "Snail Speed...";
 				return;
 			case DebuffList.INVERTED_PAD_MOVE:
-				dropEffect = "Drunk!";
+				dropEffect = "Drunk...";
 				return;
 			case DebuffList.HALF_PAD_SPEED:
-				dropEffect = "Slowed!";
+				dropEffect = "Slowed Down...";
+				paddle.setMoveSpeed(0.5);
 				return;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + effect);

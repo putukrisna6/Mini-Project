@@ -8,12 +8,12 @@ import com.main.Commons;
 
 public class Paddle extends Sprite {
 	private int dx;
-	private int moveSpeedLeft = -1;
-	private int moveSpeedRight = 1;	
+	private int moveSpeedLeft = -2;
+	private int moveSpeedRight = 2;	
 	
 	@Override
 	protected void loadImage() {
-		ImageIcon ii = new ImageIcon("Resource/Sprites/paddle.png");
+		ImageIcon ii = new ImageIcon("Resource/Sprites/Paddles/paddle.png");
 		image = ii.getImage();
 	}
 	
@@ -57,15 +57,20 @@ public class Paddle extends Sprite {
         }
     }
 	
-	public void setMoveSpeed(int multiplier) {
+	public void setMoveSpeed(double multiplier) {
 		this.moveSpeedLeft *= multiplier;
 		this.moveSpeedRight *= multiplier;
 	}
 	
-//	public void setMoveSpeedLeft(int moveSpeedLeft) {
-//		this.moveSpeedLeft = moveSpeedLeft;
-//	}
-//	public void setMoveSpeedRight(int moveSpeedRight) {
-//		this.moveSpeedRight = moveSpeedRight;
-//	}
+	public void setToLong() {
+		ImageIcon ii = new ImageIcon("Resource/Sprites/Paddles/paddle-long.png");
+		image = ii.getImage();
+		getImageDimensions();
+	}
+	public void setToShort() {
+		ImageIcon ii = new ImageIcon("Resource/Sprites/Paddles/paddle-short.png");
+		image = ii.getImage();
+		getImageDimensions();
+	}
+
 }

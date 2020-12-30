@@ -36,8 +36,8 @@ public class Ball extends Sprite {
 	
 	public Ball() {
 		super();
-		xDir = 1;
-		yDir = -1;
+		xDir = 0;
+		yDir = 1;
 
 		resetState();
 	}
