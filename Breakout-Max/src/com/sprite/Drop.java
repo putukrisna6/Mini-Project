@@ -1,10 +1,10 @@
 package com.sprite;
 
-import javax.swing.ImageIcon;
+import java.util.Random;
 
 import com.main.Commons;
 
-public class Drop extends Sprite {
+public abstract class Drop extends Sprite {
 	
 	private int yDir;
 	
@@ -27,9 +27,11 @@ public class Drop extends Sprite {
 	}
 	
 	@Override
-	protected void loadImage() {
-		ImageIcon ii = new ImageIcon("Resource/Sprites/pickuptemp.png");
-		image = ii.getImage();		
+	protected abstract void loadImage();
+	
+	public int getEffect() {
+		Random rand = new Random();
+		return rand.nextInt(4);
 	}
 	
 	public void setYDir(int y) {

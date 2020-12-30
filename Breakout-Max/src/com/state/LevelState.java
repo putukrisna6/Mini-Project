@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.Timer;
 
@@ -19,6 +20,9 @@ import com.main.Commons;
 import com.main.Main;
 import com.map.Background;
 import com.sprite.*;
+import com.sprite.drops.Buff;
+import com.sprite.drops.BuffList;
+import com.sprite.drops.Debuff;
 
 public class LevelState extends State {
 	
@@ -297,14 +301,15 @@ public class LevelState extends State {
 	    			bricks[i].setIsDestroyed(true);
 	    			score++;
 	    			
-	    			// trying out the Random class
-	    			// to be improved upon to implement the random boon/curse mechanism
-//	    			Random rand = new Random();
-//	    			int randInt = rand.nextInt(1000);
-//	    			TODO - make it actually random
-	    			if (true) {
-//	    				System.out.println("it's random! " + randInt);
-	    				drops.add(new Drop(bricks[i].getX() + 10, bricks[i].getY()));
+	    			// TODO - Future implementation won't have a random chance of getting buff/debuff
+	    			Random rand = new Random();
+	    			int randInt = rand.nextInt(1000);
+
+	    			if (randInt % 2 == 0) {
+	    				drops.add(new Buff(bricks[i].getX() + 10, bricks[i].getY()));
+	    			}
+	    			else {
+	    				drops.add(new Debuff(bricks[i].getX() + 10, bricks[i].getY()));
 	    			}
 	    		}
 	    	}
@@ -315,10 +320,22 @@ public class LevelState extends State {
 		for (int i = 0; i < drops.size(); i++) {
 			Drop drop = drops.get(i);
 			
+			boolean isGood;
+			int effect;
+			
 			// if the paddle intersects with the drop, "collect" it			
 			if (drop.getRect().intersects(paddle.getRect())) {
-				// change the dropEffect string to inform what was activated
-				dropEffect = drop.toString() + " is now active!";
+				
+				if (drop instanceof Buff) {
+					isGood = true;
+				}
+				else {
+					isGood = false;
+				}
+				effect = drop.getEffect();
+				
+				fetchEffect(isGood, effect);
+				
 				// wait for 800 millisecond (I think it is 800 millisecond)
 				// afterwards set the string back to null so it is no longer visible
 				// then stop the timer
@@ -341,6 +358,30 @@ public class LevelState extends State {
 			else {
 				drops.remove(i);
 			}
+		}
+	}
+	
+	private void fetchEffect(boolean isGood, int effect) {
+		if (isGood) {
+			switch (effect) {
+			case BuffList.DOUBLE_PAD_LENGTH: 
+				dropEffect = "Double Paddle Length is now active!";
+				return;
+			case BuffList.DOUBLE_SCORE:
+				dropEffect = "Double Score for 5 seconds!";
+				return;
+			case BuffList.DOUBLE_BALLS:
+				dropEffect = "Double Balls!";
+				return;
+			case BuffList.DOUBLE_PAD_SPEED:
+				dropEffect = "Move Faster!";
+				return;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + effect);
+			}
+		}
+		else {
+			
 		}
 	}
 }
