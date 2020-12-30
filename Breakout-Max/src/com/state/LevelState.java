@@ -23,6 +23,7 @@ import com.sprite.*;
 import com.sprite.drops.Buff;
 import com.sprite.drops.BuffList;
 import com.sprite.drops.Debuff;
+import com.sprite.drops.DebuffList;
 
 public class LevelState extends State {
 	
@@ -381,7 +382,22 @@ public class LevelState extends State {
 			}
 		}
 		else {
-			
+			switch (effect) {
+			case DebuffList.HALF_PAD_LENGTH:
+				dropEffect = "Oh no! Your paddle's length is halved!";
+				return;
+			case DebuffList.HALF_BALL_SPEED:
+				dropEffect = "Snail Speed!";
+				return;
+			case DebuffList.INVERTED_PAD_MOVE:
+				dropEffect = "Drunk!";
+				return;
+			case DebuffList.HALF_PAD_SPEED:
+				dropEffect = "Slowed!";
+				return;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + effect);
+			}
 		}
 	}
 }
