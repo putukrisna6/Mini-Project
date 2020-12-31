@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +25,6 @@ public class LevelState extends State {
 	
 //	Attributes for basic level stuffs
 	private boolean inGame = true;
-	private int score = 0;
 	private String message = "Game Over";
 	Background bg;
 	
@@ -38,9 +36,10 @@ public class LevelState extends State {
 	
 	List<Drop> drops;
 	
-//	List of buffs
-	HashSet<String> effects;
+//	Handle buffs
 	String dropEffect;
+	private int score;
+	private int addScoreValue;
 	
 //	Constructor
 	public LevelState(StateManager sm, int numOfBricks) {
@@ -59,8 +58,10 @@ public class LevelState extends State {
 		ball = new Ball();
 		paddle = new Paddle();
 		drops = new ArrayList<Drop>();
-		
 		dropEffect = null;
+		
+		score = 0;
+		addScoreValue = 1;
 	}
 
 	@Override
@@ -294,7 +295,7 @@ public class LevelState extends State {
 	    				ball.setYDir(-1);
 	    			}
 	    			bricks[i].setIsDestroyed(true);
-	    			score++;
+	    			score = score + addScoreValue;
 	    			
 	    			// TODO - Future implementation won't have a random chance of getting buff/debuff
 	    			Random rand = new Random();
@@ -355,6 +356,7 @@ public class LevelState extends State {
 		}
 	}
 	private void fetchEffect(boolean isGood, int effect) {
+		resetEffects();
 		if (isGood) {
 			switch (effect) {
 			case BuffList.DOUBLE_PAD_LENGTH: 
@@ -362,8 +364,8 @@ public class LevelState extends State {
 				paddle.setToLong();
 				return;
 			case BuffList.DOUBLE_SCORE:
-				// TODO - Hadeh mager banget implementasi timer awokwaokaw
 				dropEffect = "Double Score for 5 seconds!";
+				doubleScore();
 				return;
 			case BuffList.DOUBLE_BALLS:
 				dropEffect = "Double Balls!";
@@ -382,11 +384,13 @@ public class LevelState extends State {
 				dropEffect = "Chopped Paddle...";
 				paddle.setToShort();
 				return;
-			case DebuffList.HALF_BALL_SPEED:
-				dropEffect = "Snail Speed...";
+			case DebuffList.TRIPLE_BALL_SPEED:
+				dropEffect = "Ball is on the loose!";
+				ball.setSpeedMultiplier(3);
 				return;
 			case DebuffList.INVERTED_PAD_MOVE:
 				dropEffect = "Drunk...";
+				paddle.setInverted(true);
 				return;
 			case DebuffList.HALF_PAD_SPEED:
 				dropEffect = "Slowed Down...";
@@ -396,5 +400,24 @@ public class LevelState extends State {
 				throw new IllegalArgumentException("Unexpected value: " + effect);
 			}
 		}
+	}
+	private void doubleScore() {	
+    	addScoreValue = 2;
+
+		new Timer(15000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	addScoreValue = 1;
+            	((Timer)e.getSource()).stop();
+            }
+        }).start();
+	}
+	// effects don't stack here :(
+	private void resetEffects() {
+		paddle.setToNormal();
+		paddle.setInverted(false);
+		paddle.setMoveSpeed(1);
+		ball.setSpeedMultiplier(1);
+		addScoreValue = 1;
 	}
 }

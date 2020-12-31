@@ -24,14 +24,14 @@ public class OptionState extends State {
 	private int currChoice = 0;
 	
 //	Select
-	private static int currDiff = 0;
+	public static int currDiff = 0;
 	private String[] diff = {
 				"<|  Easy  |>", "<|  Normal  |>", "<|  Hard  |>"
 			};
 	
-	private static int currSkin = 0;
+	public static int currSkin = 0;
 	private String[] skin = {
-				"<|  Default  |>", "<|  Rare  |>"
+				"<|  Blue  |>", "<|  Green  |>", "<|  Red  |>"
 			};
 	
 //	Constructor

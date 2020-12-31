@@ -22,10 +22,10 @@ public class Ball extends Sprite {
 	}
 	
 	public void setXDir(int x) {
-		xDir = x * speedMultiplier;
+		xDir = x;
 	}
 	public void setYDir(int y) {
-		yDir = y * speedMultiplier;
+		yDir = y;
 	}
 	public int getYDir() {
 		return yDir;
@@ -42,16 +42,16 @@ public class Ball extends Sprite {
 		resetState();
 	}
 	public void move() {
-		x += xDir;
-		y += yDir;
+		x += xDir * speedMultiplier;
+		y += yDir * speedMultiplier;
 		
 		if (x == 0) {
 			setXDir(1);
 		}
-		if (x == Commons.WIDTH - getImageWidth()) {
+		else if (x == Commons.WIDTH - (getImageWidth() * speedMultiplier)) {
 			setXDir(-1);
 		}
-		if (y == 0) {
+		if (y == getImageHeight()) {
 			setYDir(1);
 		}
 	}
