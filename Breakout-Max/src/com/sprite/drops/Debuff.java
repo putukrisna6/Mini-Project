@@ -12,6 +12,6 @@ public class Debuff extends Drop {
 	@Override
 	protected void loadImage() {
 		ImageIcon ii = new ImageIcon("Resource/Sprites/Drops/drop-bad.png");
-		image = ii.getImage();		
+		image = ii.getImage();
 	}
 }

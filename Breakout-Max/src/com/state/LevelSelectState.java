@@ -11,57 +11,55 @@ import com.main.Commons;
 import com.map.Background;
 
 public class LevelSelectState extends State {
-	
+
 	private Background bg;
-	
+
 //	Title Font
 	private Font titleFont;
 
 //	Options Font
 	private Font levelFont;
-	private String[][] levelSets = {
-									{"<|  Adventure I  |>", "Stage I-1", "Stage I-2", "Stage I-3","Back to Menu"},
-									{"<|  Adventure II  |>","Stage II-1", "Stage II-2", "Stage II-3", "Back to Menu"},
-									{"<|  Adventure III  |>","Stage III-1","Stage III-2", "Stage III-3", "Back to Menu"}
-									};
-	
+	private String[][] levelSets = { { "<|  Adventure I  |>", "Stage I-1", "Stage I-2", "Stage I-3", "Back to Menu" },
+			{ "<|  Adventure II  |>", "Stage II-1", "Stage II-2", "Stage II-3", "Back to Menu" },
+			{ "<|  Adventure III  |>", "Stage III-1", "Stage III-2", "Stage III-3", "Back to Menu" } };
+
 	private int currSet = 0;
 	private int currLevel = 0;
 
 //	Constructor
 	public LevelSelectState(StateManager sm) {
 		super(sm);
-		
+
 		try {
 			bg = new Background("/Backgrounds/selectbg.png", 1);
 			bg.setVector(0, 0);
-			
+
 			titleFont = new Font("04b", Font.PLAIN, 24);
 			levelFont = new Font("Minecraftia", Font.PLAIN, 14);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void init() { }
+	public void init() {
+	}
+
 	@Override
-	public void update() {	}
+	public void update() {
+	}
+
 	@Override
 	public void draw(Graphics2D g2d) {
 		bg.draw(g2d);
-		
-		g2d.setRenderingHint(
-				RenderingHints.KEY_TEXT_ANTIALIASING, 
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON
-			);
-		
+
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		FontMetrics m;
 		String text;
 		int x;
 		int y;
-		
+
 //		draw title
 		m = g2d.getFontMetrics(titleFont);
 		g2d.setFont(titleFont);
@@ -69,30 +67,29 @@ public class LevelSelectState extends State {
 		text = "Level Select";
 		x = makeWidth(text, m);
 		y = makeHeight(70, m);
-		
+
 		g2d.drawString(text, x, y);
-		
+
 //		draw options
 		m = g2d.getFontMetrics(levelFont);
 		g2d.setFont(levelFont);
-		
+
 		for (int i = 0; i < levelSets[currSet].length; i++) {
 			if (i == currLevel) {
 				g2d.setColor(Color.RED);
-			}
-			else {
+			} else {
 				g2d.setColor(Color.WHITE);
 			}
-			
+
 			y = makeHeight(140 + i * 27, m);
 			// make the "back to menu" lower
 			if (i == 4) {
 				y = makeHeight(140 + i * 35, m);
 			}
-			
+
 			text = levelSets[currSet][i];
 			x = makeWidth(text, m);
-			
+
 			g2d.drawString(text, x, y);
 		}
 	}
@@ -105,15 +102,14 @@ public class LevelSelectState extends State {
 				if (currSet < 0) {
 					currSet = levelSets.length - 1;
 				}
-			}
-			else if (k == KeyEvent.VK_RIGHT) {
+			} else if (k == KeyEvent.VK_RIGHT) {
 				currSet++;
 				if (currSet == levelSets.length) {
 					currSet = 0;
 				}
 			}
-		}	
-		
+		}
+
 		if (k == KeyEvent.VK_ENTER) {
 			select();
 		}
@@ -129,11 +125,13 @@ public class LevelSelectState extends State {
 				currLevel = 0;
 			}
 		}
-		
+
 	}
+
 	@Override
-	public void keyReleased(int k) {}
-	
+	public void keyReleased(int k) {
+	}
+
 	private void select() {
 //		if (currLevel == 0) {
 //			sm.setState(StateManager.LEVEL1STATE);
@@ -150,23 +148,22 @@ public class LevelSelectState extends State {
 		if (currLevel == 4) {
 			sm.setState(StateManager.MENUSTATE);
 		}
-		
+
 		if (currSet == 0) {
 			if (currLevel == 1) {
 				sm.setState(StateManager.LEVEL1STATE);
-			}
-			else if (currLevel == 2) {
+			} else if (currLevel == 2) {
 				sm.setState(StateManager.LEVEL2STATE);
-			}
-			else if (currLevel == 3) {
+			} else if (currLevel == 3) {
 				sm.setState(StateManager.LEVEL3STATE);
 			}
 		}
 	}
-	
+
 	private int makeWidth(String text, FontMetrics m) {
 		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
 	}
+
 	private int makeHeight(int y, FontMetrics m) {
 		return (y - m.getHeight() / 2) + m.getAscent();
 	}
