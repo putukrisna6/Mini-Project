@@ -1,8 +1,5 @@
 package com.state.levels;
 
-import com.sprite.bricks.MultipleHitBrick;
-import com.sprite.bricks.NormalBrick;
-import com.sprite.bricks.UnbreakableBrick;
 import com.state.LevelState;
 import com.state.StateManager;
 

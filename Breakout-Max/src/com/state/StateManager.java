@@ -9,15 +9,23 @@ public class StateManager {
 	private State[] states;
 	private int currentState;
 
-	public static final int NUMGAMESTATES = 7;
+	public static final int NUMGAMESTATES = 14;
 
 	public static final int MENUSTATE = 0;
 	public static final int SELECTSTATE = 1;
 	public static final int HELPSTATE = 2;
 	public static final int OPTIONSTATE = 3;
+	
 	public static final int LEVEL1STATE = 4;
 	public static final int LEVEL2STATE = 5;
 	public static final int LEVEL3STATE = 6;
+	public static final int LEVEL4STATE = 7;
+	public static final int LEVEL5STATE = 8;
+	public static final int LEVEL6STATE = 9;
+	public static final int LEVEL7STATE = 10;
+	public static final int LEVEL8STATE = 11;
+	public static final int LEVEL9STATE = 12;
+	public static final int LEVEL10STATE = 13;
 
 	public StateManager() {
 //		states = new ArrayList<State>();
@@ -29,20 +37,51 @@ public class StateManager {
 	}
 
 	private void loadState(int state) {
-		if (state == MENUSTATE) {
+		switch (state) {
+		case MENUSTATE:
 			states[state] = new MenuState(this);
-		} else if (state == SELECTSTATE) {
+			return;
+		case SELECTSTATE:
 			states[state] = new LevelSelectState(this);
-		} else if (state == HELPSTATE) {
+			return;
+		case HELPSTATE:
 			states[state] = new HelpState(this);
-		} else if (state == OPTIONSTATE) {
+			return;
+		case OPTIONSTATE:
 			states[state] = new OptionState(this);
-		} else if (state == LEVEL1STATE) {
+			return;
+		case LEVEL1STATE:
 			states[state] = new Level_1(this, 7, 7);
-		} else if (state == LEVEL2STATE) {
+			return;
+		case LEVEL2STATE:
 			states[state] = new Level_2(this, 7, 7);
-		} else if (state == LEVEL3STATE) {
+			return;
+		case LEVEL3STATE:
 			states[state] = new Level_3(this, 7, 7);
+			return;
+		case LEVEL4STATE:
+			states[state] = new Level_4(this, 7, 7);
+			return;
+		case LEVEL5STATE:
+			states[state] = new Level_5(this, 7, 7);
+			return;
+		case LEVEL6STATE:
+			states[state] = new Level_6(this, 7, 7);
+			return;
+		case LEVEL7STATE:
+			states[state] = new Level_7(this, 7, 7);
+			return;
+		case LEVEL8STATE:
+			states[state] = new Level_8(this, 7, 7);
+			return;
+		case LEVEL9STATE:
+			states[state] = new Level_9(this, 7, 7);
+			return;
+		case LEVEL10STATE:
+			states[state] = new Level_10(this, 7, 7);
+			return;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + state);
 		}
 	}
 
@@ -61,16 +100,13 @@ public class StateManager {
 	public void update() {
 		try {
 			states[currentState].update();
-		} catch (Exception e) {
-
-		}
+		} catch (Exception e) {}
 	}
 
 	public void draw(Graphics2D g2d) {
 		try {
 			states[currentState].draw(g2d);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 	}
 
 	public void keyPressed(int k) {

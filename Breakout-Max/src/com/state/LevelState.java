@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
@@ -96,7 +95,7 @@ public class LevelState extends State {
 	// from top left coordinate (x1,y1) to bottom right coordinate (x2,y2)
 	public void fillConfiguration(int x1, int y1, int x2, int y2, int id) {
 
-		// normalize boundry
+		// normalize boundary
 		if (x1 < 0)
 			x1 = 0;
 		if (x1 >= this.rows)
@@ -122,7 +121,7 @@ public class LevelState extends State {
 
 	public void fillConfiguration(int x, int y, int id) {
 
-		// normalize boundry
+		// normalize boundary
 		if (x < 0)
 			x = 0;
 		if (x >= this.rows)
@@ -133,7 +132,6 @@ public class LevelState extends State {
 			y = this.columns - 1;
 
 		bricksConfiguration[x][y] = id;
-
 	}
 
 	public void translateConfiguration() {

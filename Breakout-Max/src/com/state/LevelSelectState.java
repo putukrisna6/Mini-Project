@@ -16,12 +16,11 @@ public class LevelSelectState extends State {
 
 //	Title Font
 	private Font titleFont;
-
 //	Options Font
 	private Font levelFont;
-	private String[][] levelSets = { { "<|  Adventure I  |>", "Stage I-1", "Stage I-2", "Stage I-3", "Back to Menu" },
-			{ "<|  Adventure II  |>", "Stage II-1", "Stage II-2", "Stage II-3", "Back to Menu" },
-			{ "<|  Adventure III  |>", "Stage III-1", "Stage III-2", "Stage III-3", "Back to Menu" } };
+//  Levels
+	private String[][] levelSets = { { "<|  Adventure I  |>", "Stage I-1", "Stage I-2", "Stage I-3", "Stage I-4", "Stage I-5","Back to Menu" },
+			{ "<|  Adventure II  |>", "Stage II-1", "Stage II-2", "Stage II-3", "Stage II-4", "Stage II-5","Back to Menu" }};
 
 	private int currSet = 0;
 	private int currLevel = 0;
@@ -83,8 +82,8 @@ public class LevelSelectState extends State {
 
 			y = makeHeight(140 + i * 27, m);
 			// make the "back to menu" lower
-			if (i == 4) {
-				y = makeHeight(140 + i * 35, m);
+			if (i == 6) {
+				y = makeHeight(140 + i * 30, m);
 			}
 
 			text = levelSets[currSet][i];
@@ -133,19 +132,7 @@ public class LevelSelectState extends State {
 	}
 
 	private void select() {
-//		if (currLevel == 0) {
-//			sm.setState(StateManager.LEVEL1STATE);
-//		}
-//		else if (currLevel == 1) {
-//			sm.setState(StateManager.LEVEL2STATE);
-//		}
-//		else if (currLevel == 2) {
-//			
-//		}
-//		else if (currLevel == 3) {
-//			sm.setState(StateManager.MENUSTATE);
-//		}
-		if (currLevel == 4) {
+		if (currLevel == 6) {
 			sm.setState(StateManager.MENUSTATE);
 		}
 
@@ -156,6 +143,23 @@ public class LevelSelectState extends State {
 				sm.setState(StateManager.LEVEL2STATE);
 			} else if (currLevel == 3) {
 				sm.setState(StateManager.LEVEL3STATE);
+			} else if (currLevel == 4) {
+				sm.setState(StateManager.LEVEL4STATE);
+			} else if (currLevel == 5) {
+				sm.setState(StateManager.LEVEL5STATE);
+			}
+		}
+		else if (currSet == 1) {
+			if (currLevel == 1) {
+				sm.setState(StateManager.LEVEL6STATE);
+			} else if (currLevel == 2) {
+				sm.setState(StateManager.LEVEL7STATE);
+			} else if (currLevel == 3) {
+				sm.setState(StateManager.LEVEL8STATE);
+			} else if (currLevel == 4) {
+				sm.setState(StateManager.LEVEL9STATE);
+			} else if (currLevel == 5) {
+				sm.setState(StateManager.LEVEL10STATE);
 			}
 		}
 	}
@@ -163,7 +167,6 @@ public class LevelSelectState extends State {
 	private int makeWidth(String text, FontMetrics m) {
 		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
 	}
-
 	private int makeHeight(int y, FontMetrics m) {
 		return (y - m.getHeight() / 2) + m.getAscent();
 	}
