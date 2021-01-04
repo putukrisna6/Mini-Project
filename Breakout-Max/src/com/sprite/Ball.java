@@ -58,4 +58,17 @@ public class Ball extends Sprite {
 			setYDir(1);
 		}
 	}
+	
+	public void moveNorth() {
+		yDir = Math.abs(yDir) * -1;
+    }
+    public void moveSouth() {
+    	yDir = Math.abs(yDir);
+    }
+    public void moveWest() {
+    	xDir = Math.abs(xDir) * -1;
+    }
+    public void moveEast() {
+    	xDir = Math.abs(xDir);
+    }
 }

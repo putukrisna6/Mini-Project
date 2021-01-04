@@ -18,7 +18,7 @@ public class OptionState extends State {
 
 //	Options Font
 	private Font optionFont;
-	private String[] options = { "Difficulty: ", "Paddle Skin: ", "Back to Menu" };
+	private String[] options = { "Difficulty: ", "Paddle Skin: ", "Cheats: ","Back to Menu" };
 	private int currChoice = 0;
 
 //	Select
@@ -28,6 +28,9 @@ public class OptionState extends State {
 	public static int currSkin = 0;
 	private String[] skin = { "<|  Blue  |>", "<|  Green  |>", "<|  Red  |>" };
 
+	public static int currCheat = 0;
+	private String[] cheat = { "<|  Off  |>", "<|  On  |>" };
+	
 //	Constructor
 	public OptionState(StateManager sm) {
 		super(sm);
@@ -92,8 +95,10 @@ public class OptionState extends State {
 			} else if (i == 1) {
 				text = options[i] + skin[currSkin];
 			} else if (i == 2) {
+				text = options[i] + cheat[currCheat];
+			} else {
 				text = options[i];
-				y = makeHeight(140 + i * 40, m);
+				y = makeHeight(140 + i * 35, m);
 			}
 
 			x = makeWidth(text, m);
@@ -144,6 +149,18 @@ public class OptionState extends State {
 					currSkin = 0;
 				}
 			}
+		} else if (currChoice == 2) {
+			if (k == KeyEvent.VK_LEFT) {
+				currCheat--;
+				if (currCheat < 0) {
+					currCheat = cheat.length - 1;
+				}
+			} else if (k == KeyEvent.VK_RIGHT) {
+				currCheat++;
+				if (currCheat == cheat.length) {
+					currCheat = 0;
+				}
+			}
 		}
 	}
 
@@ -156,7 +173,7 @@ public class OptionState extends State {
 
 		} else if (currChoice == 1) {
 
-		} else if (currChoice == 2) {
+		} else if (currChoice == 3) {
 			sm.setState(StateManager.MENUSTATE);
 		}
 	}

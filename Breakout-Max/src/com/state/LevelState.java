@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,11 +33,14 @@ public class LevelState extends State {
 	Background bg;
 
 //	Game Sprite
-	private Ball ball;
+//	private Ball ball;
+	private ArrayList<Ball> balls;
 	private Paddle paddle;
 	protected Brick[] bricks;
 	protected int numOfBricks;
-
+	
+	private int allowedBallDrop;
+	
 	List<Drop> drops;
 
 //	Handle buffs
@@ -66,11 +70,13 @@ public class LevelState extends State {
 
 		bricks = new Brick[this.numOfBricks];
 
-		ball = new Ball();
+		balls = new ArrayList<Ball>();
+		balls.add(new Ball());
+		allowedBallDrop = 0;
 		paddle = new Paddle();
 		drops = new ArrayList<Drop>();
 		dropEffect = null;
-
+		
 		score = 0;
 		addScoreValue = 1;
 	}
@@ -78,15 +84,12 @@ public class LevelState extends State {
 	public int getRows() {
 		return rows;
 	}
-
 	public int getColumns() {
 		return columns;
 	}
-
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
-
 	public void setColumns(int columns) {
 		this.columns = columns;
 	}
@@ -118,7 +121,6 @@ public class LevelState extends State {
 				bricksConfiguration[i][j] = id;
 
 	}
-
 	public void fillConfiguration(int x, int y, int id) {
 
 		// normalize boundary
@@ -133,7 +135,6 @@ public class LevelState extends State {
 
 		bricksConfiguration[x][y] = id;
 	}
-
 	public void translateConfiguration() {
 
 		int k = 0;
@@ -183,12 +184,10 @@ public class LevelState extends State {
 	@Override
 	public void init() {
 	}
-
 	@Override
 	public void update() {
 		doGameCycle();
 	}
-
 	@Override
 	public void draw(Graphics2D g2d) {
 		bg.draw(g2d);
@@ -206,12 +205,14 @@ public class LevelState extends State {
 	// draw every sprite
 	private void drawObjects(Graphics2D g2d) {
 		// draw ball
-		g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(), ball.getImageWidth(), ball.getImageHeight(),
-				Main.panel);
+		for (Ball ball : balls) {
+			g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(), ball.getImageWidth(), ball.getImageHeight(),
+					Main.panel);
+		}
 		// draw paddle
 		g2d.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), paddle.getImageWidth(), paddle.getImageHeight(),
 				Main.panel);
-
+		
 		// draw bricks
 		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
@@ -249,8 +250,8 @@ public class LevelState extends State {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
-
 	// if the game is done, draw these strings
 	private void gameFinished(Graphics2D g2d) {
 		// Attributes to help to draw the message string
@@ -275,39 +276,57 @@ public class LevelState extends State {
 	@Override
 	public void keyPressed(int k) {
 		paddle.keyPressed(k);
-
+		
 		if (!inGame) {
 			if (k == KeyEvent.VK_ENTER) {
 				sm.setState(StateManager.SELECTSTATE);
 			}
-		}
-		if (inGame) {
+		} else if (inGame) {
 			if (k == KeyEvent.VK_ESCAPE) {
 				sm.setState(StateManager.SELECTSTATE);
+			} 
+			if (OptionState.currCheat == 1) {
+				if (k == KeyEvent.VK_C) {
+					secondBall();
+				}
 			}
 		}
+		
 	}
-
 	@Override
 	public void keyReleased(int k) {
 		paddle.keyReleased(k);
 	}
 
 	private void doGameCycle() {
-		ball.move();
 		paddle.move();
-		checkCollision();
+
+		for (int i = 0; i < balls.size(); i++) {
+			Ball ball = balls.get(i);
+			if (ball != null) {
+				ball.move();
+				checkCollision(ball, i);
+			}
+		}
+		ballCollideWithEachOther();
 		updateDrops();
 	}
-
 	private void stopGame() {
 		inGame = false;
 	}
 
 	// check collision between paddle, ball, bricks, and the wall
-	private void checkCollision() {
+	private void checkCollision(Ball ball, int index) {
 		if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) {
-			stopGame();
+			if (allowedBallDrop == 0) {
+				stopGame();
+			}
+			else {
+				ball = null;
+				allowedBallDrop--;
+				balls.remove(index);
+				return;
+			}
 		}
 
 		for (int i = 0, j = 0; i < numOfBricks; i++) {
@@ -411,7 +430,46 @@ public class LevelState extends State {
 			}
 		}
 	}
-
+	private void ballCollideWithEachOther() {
+		for (Ball b1 : balls) {
+			for (Ball b2 : balls) {
+				if (b1 != b2) {
+					Rectangle rect1 = b1.getRect();
+					Rectangle rect2 = b2.getRect();
+					if (rect1.intersects(rect2)) {
+						int ballLeft = (int) rect1.getMinX();
+						int ballHeight = (int) rect1.getHeight();
+						int ballWidth = (int) rect1.getWidth();
+						int ballTop = (int) rect1.getMinY();
+						
+						Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+			    		Point pointLeft = new Point(ballLeft - 1, ballTop);
+			    		Point pointTop = new Point(ballLeft, ballTop - 1);
+			    		Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+			    		
+			    		if (rect2.contains(pointRight)) {
+			    			b1.moveWest();
+			    			b2.moveEast();
+			    		}
+			    		else if (rect2.contains(pointLeft)) {
+			    			b2.moveWest();
+			    			b1.moveEast();
+			    		}
+			    		
+			    		if (rect2.contains(pointTop)) {
+			    			b1.moveSouth();
+			    			b2.moveNorth();
+			    		}
+			    		else if (rect2.contains(pointBottom)) {
+			    			b2.moveSouth();
+			    			b1.moveNorth();
+			    		}
+					}
+				}
+			}
+		}
+	}
+	
 	// handles everything from making the drop move, disappear, then when the drop
 	// is "collected"
 	private void updateDrops() {
@@ -465,11 +523,12 @@ public class LevelState extends State {
 				paddle.setToLong();
 				return;
 			case BuffList.DOUBLE_SCORE:
-				dropEffect = "Double Score for 5 seconds!";
+				dropEffect = "Double Score for 15 seconds!";
 				doubleScore();
 				return;
 			case BuffList.DOUBLE_BALLS:
-				dropEffect = "Double Balls!";
+				dropEffect = "Another Ball Dropping!";
+				secondBall();
 				return;
 			case BuffList.DOUBLE_PAD_SPEED:
 				dropEffect = "Move Faster!";
@@ -486,7 +545,7 @@ public class LevelState extends State {
 				return;
 			case DebuffList.TRIPLE_BALL_SPEED:
 				dropEffect = "Ball is on the loose!";
-				ball.setSpeedMultiplier(3);
+				balls.get(0).setSpeedMultiplier(3);
 				return;
 			case DebuffList.INVERTED_PAD_MOVE:
 				dropEffect = "Drunk...";
@@ -513,13 +572,17 @@ public class LevelState extends State {
 			}
 		}).start();
 	}
+	private void secondBall() {
+		balls.add(new Ball());
+		allowedBallDrop++;
+	}
 
 	// effects don't stack here :(
 	private void resetEffects() {
 		paddle.setToNormal();
 		paddle.setInverted(false);
 		paddle.setMoveSpeed(1);
-		ball.setSpeedMultiplier(1);
+		balls.get(0).setSpeedMultiplier(1);
 		addScoreValue = 1;
 	}
 }

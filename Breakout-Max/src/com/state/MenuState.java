@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JOptionPane;
+
 import com.main.Commons;
 import com.map.AudioPlayer;
 import com.map.Background;
@@ -43,7 +45,7 @@ public class MenuState extends State {
 	@Override
 	public void update() {
 //		bg.update();
-//		uncomment to make the bg move
+//		uncomment to make the background move
 	}
 
 	@Override
@@ -104,7 +106,16 @@ public class MenuState extends State {
 		} else if (currentChoice == 2) {
 			sm.setState(StateManager.OPTIONSTATE);
 		} else if (currentChoice == 3) {
-			System.exit(0);
+			int choose = JOptionPane.showConfirmDialog(
+						null,
+						"Do you really want to quit the game?",
+						"BreakOut Max",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.INFORMATION_MESSAGE
+					);
+			if (choose == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
 		}
 	}
 
