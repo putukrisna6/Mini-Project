@@ -32,6 +32,14 @@ public class MultipleHitBrick extends Brick {
 		this.maxHit = maxHit;
 	}
 
+	public void crack() {
+		// update image to cracked
+		if (this.getHitCount() == this.getMaxHit() - 1) {
+			ImageIcon cracked = new ImageIcon("Resource/Sprites/Bricks/multihit-crack-1.png");
+			this.setImage(cracked.getImage());
+		}
+	}
+	
 	@Override
 	protected void loadImage() { // UNSOLVED: change to cracked
 		ImageIcon ii = new ImageIcon("Resource/Sprites/Bricks/multihit.png");

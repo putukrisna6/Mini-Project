@@ -40,6 +40,7 @@ public class LevelState extends State {
 	protected int numOfBricks;
 	
 	private int allowedBallDrop;
+	private int numOfObstacles;
 	
 	List<Drop> drops;
 
@@ -67,6 +68,7 @@ public class LevelState extends State {
 		this.columns = columns;
 		this.numOfBricks = rows * columns;
 		this.bricksConfiguration = new int[rows][columns];
+		this.numOfObstacles = 0;
 
 		bricks = new Brick[this.numOfBricks];
 
@@ -92,6 +94,14 @@ public class LevelState extends State {
 	}
 	public void setColumns(int columns) {
 		this.columns = columns;
+	}
+	
+	public int getNumOfObstacles() {
+		return numOfObstacles;
+	}
+
+	public void setNumOfObstacles(int numOfObstacles) {
+		this.numOfObstacles = numOfObstacles;
 	}
 
 	// method to fill the configuration with specific bricks id's
@@ -174,6 +184,7 @@ public class LevelState extends State {
 				case 3: // unbreakable brick
 					bricks[k] = new UnbreakableBrick(j * Brick.BRICK_WIDTH + Brick.BRICK_X_OFFSET,
 							i * Brick.BRICK_HEIGHT + Brick.BRICK_Y_OFFSET, 'n');
+					this.setNumOfObstacles(this.getNumOfObstacles() + 1);
 					break;
 				}
 				k++;
@@ -334,7 +345,7 @@ public class LevelState extends State {
 				j++;
 			}
 
-			if (j == numOfBricks) {
+			if (j == numOfBricks - this.getNumOfObstacles()) {
 				message = "Victory";
 				stopGame();
 			}
@@ -400,8 +411,7 @@ public class LevelState extends State {
 					if (!(bricks[i] instanceof UnbreakableBrick)) {
 						if (bricks[i] instanceof NormalBrick) {
 
-							bricks[i].setIsDestroyed(true);
-							bricks[i].dropModifier(this.drops);
+							bricks[i].breaks(this.drops);
 							this.score += addScoreValue;
 
 						} else if (bricks[i] instanceof MultipleHitBrick) {
@@ -410,17 +420,12 @@ public class LevelState extends State {
 
 							multipleHitBrick.setHitCount(multipleHitBrick.getHitCount() + 1);
 
-							// update image to cracked
-							if (multipleHitBrick.getHitCount() == multipleHitBrick.getMaxHit() - 1) {
-								ImageIcon cracked = new ImageIcon("Resource/Sprites/Bricks/multihit-crack-1.png");
-								multipleHitBrick.getImage().flush();
-								multipleHitBrick.setImage(cracked.getImage());
-							}
+							// update image if cracked
+							multipleHitBrick.crack();
 
-							// multi-hit brick is destroyed because max hit is reached
+							// multi-hit brick is destroyed if max hit is reached
 							if (multipleHitBrick.getHitCount() == multipleHitBrick.getMaxHit()) {
-								bricks[i].setIsDestroyed(true);
-								bricks[i].dropModifier(this.drops);
+								bricks[i].breaks(this.drops);
 								this.score += addScoreValue;
 							}
 

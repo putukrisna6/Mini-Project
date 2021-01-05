@@ -46,4 +46,9 @@ public abstract class Brick extends Sprite {
 	public void setDropId(char dropId) {
 		this.dropId = dropId;
 	}
+	
+	public void breaks(List<Drop> d) {
+		this.setIsDestroyed(true);
+		this.dropModifier(d);
+	}
 }
