@@ -38,10 +38,10 @@ public class LevelState extends State {
 	private Paddle paddle;
 	protected Brick[] bricks;
 	protected int numOfBricks;
-	
+
 	private int allowedBallDrop;
 	private int numOfObstacles;
-	
+
 	List<Drop> drops;
 
 //	Handle buffs
@@ -78,7 +78,7 @@ public class LevelState extends State {
 		paddle = new Paddle();
 		drops = new ArrayList<Drop>();
 		dropEffect = null;
-		
+
 		score = 0;
 		addScoreValue = 1;
 	}
@@ -86,16 +86,19 @@ public class LevelState extends State {
 	public int getRows() {
 		return rows;
 	}
+
 	public int getColumns() {
 		return columns;
 	}
+
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
+
 	public void setColumns(int columns) {
 		this.columns = columns;
 	}
-	
+
 	public int getNumOfObstacles() {
 		return numOfObstacles;
 	}
@@ -131,6 +134,7 @@ public class LevelState extends State {
 				bricksConfiguration[i][j] = id;
 
 	}
+
 	public void fillConfiguration(int x, int y, int id) {
 
 		// normalize boundary
@@ -145,6 +149,7 @@ public class LevelState extends State {
 
 		bricksConfiguration[x][y] = id;
 	}
+
 	public void translateConfiguration() {
 
 		int k = 0;
@@ -195,10 +200,12 @@ public class LevelState extends State {
 	@Override
 	public void init() {
 	}
+
 	@Override
 	public void update() {
 		doGameCycle();
 	}
+
 	@Override
 	public void draw(Graphics2D g2d) {
 		bg.draw(g2d);
@@ -223,7 +230,7 @@ public class LevelState extends State {
 		// draw paddle
 		g2d.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), paddle.getImageWidth(), paddle.getImageHeight(),
 				Main.panel);
-		
+
 		// draw bricks
 		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
@@ -261,8 +268,9 @@ public class LevelState extends State {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	// if the game is done, draw these strings
 	private void gameFinished(Graphics2D g2d) {
 		// Attributes to help to draw the message string
@@ -287,7 +295,7 @@ public class LevelState extends State {
 	@Override
 	public void keyPressed(int k) {
 		paddle.keyPressed(k);
-		
+
 		if (!inGame) {
 			if (k == KeyEvent.VK_ENTER) {
 				sm.setState(StateManager.SELECTSTATE);
@@ -295,15 +303,16 @@ public class LevelState extends State {
 		} else if (inGame) {
 			if (k == KeyEvent.VK_ESCAPE) {
 				sm.setState(StateManager.SELECTSTATE);
-			} 
+			}
 			if (OptionState.currCheat == 1) {
 				if (k == KeyEvent.VK_C) {
 					secondBall();
 				}
 			}
 		}
-		
+
 	}
+
 	@Override
 	public void keyReleased(int k) {
 		paddle.keyReleased(k);
@@ -322,6 +331,7 @@ public class LevelState extends State {
 		ballCollideWithEachOther();
 		updateDrops();
 	}
+
 	private void stopGame() {
 		inGame = false;
 	}
@@ -331,8 +341,7 @@ public class LevelState extends State {
 		if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) {
 			if (allowedBallDrop == 0) {
 				stopGame();
-			}
-			else {
+			} else {
 				ball = null;
 				allowedBallDrop--;
 				balls.remove(index);
@@ -421,11 +430,13 @@ public class LevelState extends State {
 							multipleHitBrick.setHitCount(multipleHitBrick.getHitCount() + 1);
 
 							// update image if cracked
-							multipleHitBrick.crack();
+							if (multipleHitBrick.getHitCount() == multipleHitBrick.getMaxHit() - 1) {
+								multipleHitBrick.crack();
+							}
 
 							// multi-hit brick is destroyed if max hit is reached
-							if (multipleHitBrick.getHitCount() == multipleHitBrick.getMaxHit()) {
-								bricks[i].breaks(this.drops);
+							else if (multipleHitBrick.getHitCount() == multipleHitBrick.getMaxHit()) {
+								multipleHitBrick.breaks(this.drops);
 								this.score += addScoreValue;
 							}
 
@@ -435,6 +446,7 @@ public class LevelState extends State {
 			}
 		}
 	}
+
 	private void ballCollideWithEachOther() {
 		for (Ball b1 : balls) {
 			for (Ball b2 : balls) {
@@ -446,35 +458,33 @@ public class LevelState extends State {
 						int ballHeight = (int) rect1.getHeight();
 						int ballWidth = (int) rect1.getWidth();
 						int ballTop = (int) rect1.getMinY();
-						
+
 						Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-			    		Point pointLeft = new Point(ballLeft - 1, ballTop);
-			    		Point pointTop = new Point(ballLeft, ballTop - 1);
-			    		Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-			    		
-			    		if (rect2.contains(pointRight)) {
-			    			b1.moveWest();
-			    			b2.moveEast();
-			    		}
-			    		else if (rect2.contains(pointLeft)) {
-			    			b2.moveWest();
-			    			b1.moveEast();
-			    		}
-			    		
-			    		if (rect2.contains(pointTop)) {
-			    			b1.moveSouth();
-			    			b2.moveNorth();
-			    		}
-			    		else if (rect2.contains(pointBottom)) {
-			    			b2.moveSouth();
-			    			b1.moveNorth();
-			    		}
+						Point pointLeft = new Point(ballLeft - 1, ballTop);
+						Point pointTop = new Point(ballLeft, ballTop - 1);
+						Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+
+						if (rect2.contains(pointRight)) {
+							b1.moveWest();
+							b2.moveEast();
+						} else if (rect2.contains(pointLeft)) {
+							b2.moveWest();
+							b1.moveEast();
+						}
+
+						if (rect2.contains(pointTop)) {
+							b1.moveSouth();
+							b2.moveNorth();
+						} else if (rect2.contains(pointBottom)) {
+							b2.moveSouth();
+							b1.moveNorth();
+						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	// handles everything from making the drop move, disappear, then when the drop
 	// is "collected"
 	private void updateDrops() {
@@ -577,6 +587,7 @@ public class LevelState extends State {
 			}
 		}).start();
 	}
+
 	private void secondBall() {
 		balls.add(new Ball());
 		allowedBallDrop++;
