@@ -4,8 +4,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public abstract class Sprite {
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 
 	private int imageWidth;
 	private int imageHeight;
@@ -13,19 +13,19 @@ public abstract class Sprite {
 	protected Image image;
 
 //	Setters and Getters
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
@@ -55,7 +55,7 @@ public abstract class Sprite {
 
 	// Collision check
 	public Rectangle getRect() {
-		return new Rectangle(x, y, image.getWidth(null), image.getHeight(null));
+		return new Rectangle((int)x, (int)y, image.getWidth(null), image.getHeight(null));
 	}
 
 	protected void getImageDimensions() {

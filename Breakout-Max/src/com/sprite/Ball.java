@@ -6,9 +6,9 @@ import com.main.Commons;
 
 public class Ball extends Sprite {
 
-	private int xDir;
-	private int yDir;
-	private int speedMultiplier = 1;
+	private double xDir;
+	private double yDir;
+	private double speedMultiplier = 1;
 
 	@Override
 	protected void loadImage() {
@@ -21,19 +21,19 @@ public class Ball extends Sprite {
 		y = Commons.INIT_BALL_Y;
 	}
 
-	public void setXDir(int x) {
+	public void setXDir(double x) {
 		xDir = x;
 	}
 
-	public void setYDir(int y) {
+	public void setYDir(double y) {
 		yDir = y;
 	}
 
-	public int getYDir() {
+	public double getYDir() {
 		return yDir;
 	}
 
-	public void setSpeedMultiplier(int speedMultiplier) {
+	public void setSpeedMultiplier(double speedMultiplier) {
 		this.speedMultiplier = speedMultiplier;
 	}
 
@@ -49,12 +49,12 @@ public class Ball extends Sprite {
 		x += xDir * speedMultiplier;
 		y += yDir * speedMultiplier;
 
-		if (x == 0) {
+		if (x == speedMultiplier) {
 			setXDir(1);
 		} else if (x == Commons.WIDTH - (getImageWidth() * speedMultiplier)) {
 			setXDir(-1);
 		}
-		if (y == getImageHeight()) {
+		if (y == getImageHeight() * speedMultiplier) {
 			setYDir(1);
 		}
 	}

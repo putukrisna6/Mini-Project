@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 import com.sprite.Drop;
 
 public class Buff extends Drop {
-	public Buff(int x, int y) {
+	public Buff(double x, double y) {
 		super(x, y);
 	}
 

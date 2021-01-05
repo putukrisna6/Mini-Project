@@ -10,7 +10,7 @@ public abstract class Drop extends Sprite {
 
 	private boolean visible;
 
-	public Drop(int x, int y) {
+	public Drop(double x, double y) {
 		super();
 		this.x = x;
 		this.y = y;

@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 import com.main.Commons;
@@ -81,6 +80,7 @@ public class LevelState extends State {
 
 		score = 0;
 		addScoreValue = 1;
+		
 	}
 
 	public int getRows() {
@@ -224,17 +224,17 @@ public class LevelState extends State {
 	private void drawObjects(Graphics2D g2d) {
 		// draw ball
 		for (Ball ball : balls) {
-			g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(), ball.getImageWidth(), ball.getImageHeight(),
+			g2d.drawImage(ball.getImage(), (int)ball.getX(), (int)ball.getY(), ball.getImageWidth(), ball.getImageHeight(),
 					Main.panel);
 		}
 		// draw paddle
-		g2d.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), paddle.getImageWidth(), paddle.getImageHeight(),
+		g2d.drawImage(paddle.getImage(), (int)paddle.getX(), (int)paddle.getY(), paddle.getImageWidth(), paddle.getImageHeight(),
 				Main.panel);
 
 		// draw bricks
 		for (int i = 0; i < numOfBricks; i++) {
 			if (!bricks[i].getIsDestroyed()) {
-				g2d.drawImage(bricks[i].getImage(), bricks[i].getX(), bricks[i].getY(), bricks[i].getImageWidth(),
+				g2d.drawImage(bricks[i].getImage(), (int)bricks[i].getX(), (int)bricks[i].getY(), bricks[i].getImageWidth(),
 						bricks[i].getImageHeight(), null);
 			}
 		}
@@ -242,7 +242,7 @@ public class LevelState extends State {
 		// draw drops
 		try {
 			for (Drop drop : drops) {
-				g2d.drawImage(drop.getImage(), drop.getX(), drop.getY(), drop.getImageHeight(), drop.getImageWidth(),
+				g2d.drawImage(drop.getImage(), (int)drop.getX(), (int)drop.getY(), drop.getImageHeight(), drop.getImageWidth(),
 						Main.panel);
 			}
 		} catch (Exception e) {
@@ -558,9 +558,9 @@ public class LevelState extends State {
 				dropEffect = "Chopped Paddle...";
 				paddle.setToShort();
 				return;
-			case DebuffList.TRIPLE_BALL_SPEED:
-				dropEffect = "Ball is on the loose!";
-				balls.get(0).setSpeedMultiplier(3);
+			case DebuffList.HALF_BALL_SPEED:
+				dropEffect = "Ball's slowed down...";
+				halfBallSpeed();
 				return;
 			case DebuffList.INVERTED_PAD_MOVE:
 				dropEffect = "Drunk...";
@@ -587,7 +587,16 @@ public class LevelState extends State {
 			}
 		}).start();
 	}
-
+	private void halfBallSpeed() {
+		balls.get(0).setSpeedMultiplier(0.5);
+		new Timer(15000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				balls.get(0).setSpeedMultiplier(1);
+				((Timer) e.getSource()).stop();
+			}
+		}).start();
+	}
 	private void secondBall() {
 		balls.add(new Ball());
 		allowedBallDrop++;

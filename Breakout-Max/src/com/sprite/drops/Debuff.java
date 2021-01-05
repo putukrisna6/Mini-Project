@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 import com.sprite.Drop;
 
 public class Debuff extends Drop {
-	public Debuff(int x, int y) {
+	public Debuff(double x, double y) {
 		super(x, y);
 	}
 
