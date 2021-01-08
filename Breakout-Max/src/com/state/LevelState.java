@@ -30,6 +30,8 @@ public class LevelState extends State {
 	private boolean inGame = true;
 	private String message = "Game Over";
 	Background bg;
+	
+	private String[] difficulty = {"Easy", "Normal", "Hard"};
 
 //	Game Sprite
 //	private Ball ball;
@@ -81,6 +83,7 @@ public class LevelState extends State {
 		score = 0;
 		addScoreValue = 1;
 		
+		resetEffects();
 	}
 
 	public int getRows() {
@@ -253,7 +256,10 @@ public class LevelState extends State {
 		g2d.setColor(Color.GRAY);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
 		g2d.drawString(String.valueOf(score), 10, 30);
-
+		
+		g2d.setFont(new Font("Verdana", Font.PLAIN, 16));
+		g2d.drawString(difficulty[OptionState.currDiff], 250, 30);
+		
 		// draw collect drop notification
 		g2d.setColor(Color.BLACK);
 		Font notifFont = new Font("Minecraftia", Font.PLAIN, 15);
@@ -607,7 +613,19 @@ public class LevelState extends State {
 		paddle.setToNormal();
 		paddle.setInverted(false);
 		paddle.setMoveSpeed(1);
-		balls.get(0).setSpeedMultiplier(1);
+		balls.get(0).setSpeedMultiplier(setBallSpeed());
 		addScoreValue = 1;
+	}
+	
+	private double setBallSpeed() {
+		if (OptionState.currDiff == 2) {
+			return 2;
+		}
+		else if (OptionState.currDiff == 1) {
+			return 1.5;
+		}
+		else {
+			return 1;
+		}
 	}
 }
