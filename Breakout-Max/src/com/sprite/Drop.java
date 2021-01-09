@@ -3,9 +3,12 @@ package com.sprite;
 import java.util.Random;
 
 import com.main.Commons;
+import com.map.AudioPlayer;
 
 public abstract class Drop extends Sprite {
-
+	
+	protected AudioPlayer picked;
+	
 	private int yDir;
 
 	private boolean visible;
@@ -16,6 +19,7 @@ public abstract class Drop extends Sprite {
 		this.y = y;
 
 		visible = true;
+		setSFX();
 	}
 
 	public void move() {
@@ -48,10 +52,13 @@ public abstract class Drop extends Sprite {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		picked.play();
 	}
 
 	@Override
 	public String toString() {
 		return "Drop";
 	}
+	
+	protected abstract void setSFX();
 }

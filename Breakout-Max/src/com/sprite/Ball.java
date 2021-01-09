@@ -3,12 +3,17 @@ package com.sprite;
 import javax.swing.ImageIcon;
 
 import com.main.Commons;
+import com.map.AudioPlayer;
 
 public class Ball extends Sprite {
 
 	private double xDir;
 	private double yDir;
 	private double speedMultiplier = 1;
+	
+	private boolean changeDirection;
+	
+	private AudioPlayer bounceSFX;
 
 	@Override
 	protected void loadImage() {
@@ -22,10 +27,12 @@ public class Ball extends Sprite {
 	}
 
 	public void setXDir(double x) {
+		changeDirection = true;
 		xDir = x;
 	}
 
 	public void setYDir(double y) {
+		changeDirection = true;
 		yDir = y;
 	}
 
@@ -41,7 +48,9 @@ public class Ball extends Sprite {
 		super();
 		xDir = 0;
 		yDir = 1;
-
+		
+		bounceSFX = new AudioPlayer("/Music/ballcollide.wav");
+		changeDirection = false;
 		resetState();
 	}
 
@@ -50,12 +59,20 @@ public class Ball extends Sprite {
 		y += yDir * speedMultiplier;
 
 		if (x == speedMultiplier) {
+//			changeDirection = true;
 			setXDir(1);
 		} else if (x == Commons.WIDTH - (getImageWidth() * speedMultiplier)) {
 			setXDir(-1);
+//			changeDirection = true;
 		}
 		if (y == getImageHeight() * speedMultiplier) {
 			setYDir(1);
+//			changeDirection = true;
+		}
+		
+		if (changeDirection) {
+			bounceSFX.play();
+			changeDirection = false;
 		}
 	}
 	

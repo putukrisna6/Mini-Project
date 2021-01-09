@@ -17,6 +17,7 @@ import javax.swing.Timer;
 
 import com.main.Commons;
 import com.main.Main;
+import com.map.AudioPlayer;
 import com.map.Background;
 import com.sprite.*;
 import com.sprite.bricks.MultipleHitBrick;
@@ -25,7 +26,7 @@ import com.sprite.bricks.UnbreakableBrick;
 import com.sprite.drops.*;
 
 public class LevelState extends State {
-
+	
 //	Attributes for basic level stuffs
 	private boolean inGame = true;
 	private String message = "Game Over";
@@ -61,6 +62,9 @@ public class LevelState extends State {
 		try {
 			bg = new Background("/Backgrounds/levelbg.png", 1);
 			bg.setVector(0, 0);
+			
+			bgMusic = new AudioPlayer("/Music/levelsound.wav");
+			bgMusic.play();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
