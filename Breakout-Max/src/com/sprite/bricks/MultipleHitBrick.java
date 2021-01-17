@@ -33,7 +33,7 @@ public class MultipleHitBrick extends Brick {
 	}
 
 	public void crack() {
-		ImageIcon cracked = new ImageIcon("Resource/Sprites/Bricks/multihit-crack-1.png");
+		ImageIcon cracked = new ImageIcon("Resource/Sprites/Bricks/normal.png");
 		this.setImage(cracked.getImage());
 	}
 
