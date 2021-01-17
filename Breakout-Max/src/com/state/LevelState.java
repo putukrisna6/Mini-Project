@@ -64,7 +64,7 @@ public class LevelState extends State {
 			bg.setVector(0, 0);
 			
 			bgMusic = new AudioPlayer("/Music/levelsound.wav");
-			bgMusic.play();
+			bgMusic.loop();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -283,6 +283,8 @@ public class LevelState extends State {
 
 	// if the game is done, draw these strings
 	private void gameFinished(Graphics2D g2d) {
+		balls = null;
+		
 		// Attributes to help to draw the message string
 		Font font = new Font("04b", Font.PLAIN, 24);
 		FontMetrics fontMetrics = g2d.getFontMetrics(font);
