@@ -53,6 +53,7 @@ public class MainPanel extends JPanel implements Runnable, KeyListener {
 		sm = new StateManager();
 	}
 
+//	pass the keyboard inputs to the state manager
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -103,6 +104,7 @@ public class MainPanel extends JPanel implements Runnable, KeyListener {
 		sm.update();
 	}
 
+//	pass the g2d to state manager
 	private void draw() {
 		sm.draw(g2d);
 	}

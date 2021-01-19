@@ -59,15 +59,12 @@ public class Ball extends Sprite {
 		y += yDir * speedMultiplier;
 
 		if (x == speedMultiplier) {
-//			changeDirection = true;
 			setXDir(1);
 		} else if (x == Commons.WIDTH - (getImageWidth() * speedMultiplier)) {
 			setXDir(-1);
-//			changeDirection = true;
 		}
 		if (y == getImageHeight() * speedMultiplier) {
 			setYDir(1);
-//			changeDirection = true;
 		}
 		
 		if (changeDirection) {

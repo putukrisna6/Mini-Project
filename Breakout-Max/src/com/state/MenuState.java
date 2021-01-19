@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
 
-import com.main.Commons;
 import com.map.AudioPlayer;
 import com.map.Background;
 
@@ -118,13 +117,4 @@ public class MenuState extends State {
 			}
 		}
 	}
-
-	private int makeWidth(String text, FontMetrics m) {
-		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
-	}
-
-	private int makeHeight(int y, FontMetrics m) {
-		return (y - m.getHeight() / 2) + m.getAscent();
-	}
-
 }

@@ -7,7 +7,6 @@ public class AudioPlayer {
 	private Clip clip;
 
 	public AudioPlayer(String s) {
-
 		try {
 
 			AudioInputStream ais = AudioSystem.getAudioInputStream(getClass().getResourceAsStream(s));
@@ -29,7 +28,6 @@ public class AudioPlayer {
 		stop();
 		clip.setFramePosition(0);
 		clip.start();
-//		Thread.sleep(10000);
 	}
 	
 	public void loop() {

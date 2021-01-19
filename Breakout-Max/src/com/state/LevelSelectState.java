@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
-import com.main.Commons;
 import com.map.Background;
 
 public class LevelSelectState extends State {
@@ -162,12 +161,5 @@ public class LevelSelectState extends State {
 				sm.setState(StateManager.LEVEL10STATE);
 			}
 		}
-	}
-
-	private int makeWidth(String text, FontMetrics m) {
-		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
-	}
-	private int makeHeight(int y, FontMetrics m) {
-		return (y - m.getHeight() / 2) + m.getAscent();
 	}
 }

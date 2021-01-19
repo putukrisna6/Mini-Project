@@ -1,7 +1,9 @@
 package com.state;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
+import com.main.Commons;
 import com.map.AudioPlayer;
 
 public abstract class State {
@@ -26,5 +28,13 @@ public abstract class State {
 		if (bgMusic != null) {
 			bgMusic.close();
 		}
+	}
+	
+	public int makeWidth(String text, FontMetrics m) {
+		return (Commons.WIDTH / 2) - (m.stringWidth(text) / 2);
+	}
+
+	public int makeHeight(int y, FontMetrics m) {
+		return (y - m.getHeight() / 2) + m.getAscent();
 	}
 }
